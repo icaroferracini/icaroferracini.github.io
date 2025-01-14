@@ -1,0 +1,55 @@
+Estado,Status de Funcionamento,Possui recursos ou infraestrutura,Não possui nenhum recurso ou infraestrutura,Não há informação disponível para consultar,Não é possível classificar
+São Paulo,Aberto,258,216,134,2
+São Paulo,Fechado,17,35,23,1
+Minas Gerais,Aberto,200,217,8,4
+Minas Gerais,Fechado,14,34,2,1
+Rio Grande do Sul,Aberto,171,110,178,4
+Rio Grande do Sul,Fechado,9,10,14,1
+Rio de Janeiro,Aberto,109,93,87,9
+Rio de Janeiro,Fechado,11,12,11,0
+Santa Catarina,Aberto,102,55,74,3
+Santa Catarina,Fechado,6,9,5,1
+Paraná,Aberto,80,57,142,1
+Paraná,Fechado,9,9,11,0
+Ceará,Aberto,55,38,70,1
+Ceará,Fechado,4,2,7,0
+Pernambuco,Aberto,53,32,33,1
+Pernambuco,Fechado,7,8,5,0
+Bahia,Aberto,46,55,55,3
+Bahia,Fechado,1,17,11,0
+Espírito Santo,Aberto,49,24,1,0
+Espírito Santo,Fechado,6,3,1,0
+Distrito Federal,Aberto,44,30,12,1
+Distrito Federal,Fechado,1,0,1,0
+Goiás,Aberto,31,22,20,2
+Goiás,Fechado,2,3,3,0
+Pará,Aberto,30,18,13,0
+Pará,Fechado,0,1,1,0
+Paraíba,Aberto,27,28,44,0
+Paraíba,Fechado,0,0,2,0
+Rio Grande do Norte,Aberto,27,16,37,1
+Rio Grande do Norte,Fechado,3,2,4,0
+Maranhão,Aberto,20,13,10,4
+Maranhão,Fechado,2,2,3,0
+Alagoas,Aberto,17,16,29,0
+Alagoas,Fechado,0,1,4,0
+Mato Grosso,Aberto,17,8,25,2
+Mato Grosso,Fechado,1,0,4,0
+Amazonas,Aberto,15,14,16,1
+Amazonas,Fechado,0,0,2,0
+Mato Grosso do Sul,Aberto,13,13,26,0
+Mato Grosso do Sul,Fechado,1,4,3,0
+Sergipe,Aberto,13,9,10,0
+Sergipe,Fechado,0,1,1,0
+Piauí,Aberto,12,8,11,2
+Piauí,Fechado,0,0,0,0
+Tocantins,Aberto,9,5,6,0
+Tocantins,Fechado,1,0,0,0
+Rondônia,Aberto,7,4,6,0
+Rondônia,Fechado,1,1,1,0
+Acre,Aberto,5,2,10,0
+Acre,Fechado,0,3,3,1
+Amapá,Aberto,3,3,2,0
+Amapá,Fechado,0,0,1,0
+Roraima,Aberto,2,0,1,0
+Roraima,Fechado,0,2,0,0
