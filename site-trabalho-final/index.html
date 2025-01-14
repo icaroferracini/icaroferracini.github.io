@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acessibilidade nos Museus do Brasil</title>
+    <!--GoogleFonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <!--GoogleFonts-->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <section class="container">
+        <header class="header">
+            <div class="kicker-dateline">
+                <span class="kicker">Artes & Cultura</span>
+                <span class="dateline">06 de janeiro de 2025</span>
+            </div>
+            <h1>Apenas 37% dos museus no Brasil possuem recursos ou infraestrutura para receber pessoas com deficiência</h1>
+            <span class="subhead">A falta de informação e dados disponíveis é um reflexo da falta de inclusão cultural no país</span>
+            <span class="byline">por Ícaro Ferracini</span>  
+        </header>
+    <article>
+        <div class="img-wrapper">
+            <img src="https://fbb.org.br/images/repositorio/2023/05.23/Museu%20do%20Ipiranga/C1%20Réplica%20em%20autorelevo%20e%20acessibilidade%20em%20braile.jpg" alt="Réplica em autorelevo e descrição em braile para deficientes visuais" />
+            <p class="caption">Réplica em autorelevo e descrição em braile para deficientes visuais <span class="credits">Foto: Museu do Ipiranga/Divulgação</span></p>
+        </div>
+        <p>Segundo dados disponíveis no site <a href="https://cadastro.museus.gov.br/painel-analitico/" title="Acessar Museus.gov.br">Museus.gov.br</a> há <span class="destaque">4.005 museus registrados no Brasil</span>. 
+            Destes, <span class="destaque">apenas 1.511 (37%) possuem informações sobre acessibilidade em seu cadastro</span>.</p>
+        <p>Essas informações incluem descrições sobre a infraestrutura, como rampas, elevadores, piso tátil e banheiros adaptados. Ou indicações sobre recursos e serviços disponíveis para o público, como audiodescrição de obras, sinalização em braile ou visitas com tradução em Libras (Língua Brasileira de Sinais).</p>
+        <p>Imagine visitar um museu com obras impressionantes, mas não conseguir acessá-las. 
+            Essa é a realidade de <span class="destaque">1.265 (31%) museus brasileiros, que ainda carecem de infraestrutura adaptada para pessoas com deficiência</span>, e também não apresentam nenhum recurso para suas obras e exposições para pessoas com deficiência.</p>
+        <p><em>"Como saber se o museu é acessível?"</em> 
+            Essa é uma pergunta comum entre pessoas com deficiência, e os dados do site Museus.gov.br reforçam a dificuldade: <span class="destaque">1.183 (29%) instituições não informaram suas condições de acessibilidade</span>.
+            Os dados sobre acessibilidade são preenchidos com "Não informado" no site. 
+            Além disso, <span class="destaque">46 (1%) museus têm essa informação em branco em seu cadastro</span>, não deixando claro se simplesmente não informaram, ou se de fato não possuem acessibilidade no local.</p>
+        <hr>
+        <h2>Análise por região e estado</h2>
+        <p>Quando analisamos por região, considerando somente os museus em funcionamento, registrados como "Abertos" no site, <span class="destaque">a região Sudeste concentra 1.411 museus</span>, sendo que: 616 possuem algum nível de acessibilidade, 550 não possuem recursos ou infraestrutura adequada, 230 não possuem informação para consulta e 15 apresentam dados em branco.</p>
+        <p>Ao observar por estado, fazendo o mesmo recorte de museus informados como abertos, <span class="destaque">os estados que possuem mais museus cadastrados são: São Paulo (610), Rio Grande do Sul (459) e Minas Gerais (429)</span>. 
+            E, dentre eles, as instituições de Minas Gerais são as que possuem informações mais completas no site, onde é possível verificar que, entre os 429 museus: 200 possuem algum nível de acessibilidade, 217 não possuem recursos ou infraestrutura apropriada, 8 não têm informação disponível e 4 apresentam dados em branco.</p>
+        <hr>
+        <h2>Um desafio em várias esferas</h2>
+        <p>Além das disparidades regionais, observamos que <span class="destaque">a maioria dos museus no Brasil pertence à esfera pública, com 1.379 municipais, 389 federais e 565 estaduais ou distritais</span>. 
+            Dentre eles, as instituições federais são as que possuem dados mais completos sobre acessibilidade para consulta.</p>
+        <p>No geral, os dados expõem um <span class="destaque">desafio significativo para a democratização do acesso à cultura</span>. 
+            A falta da informação nos 1.183 registros do site <a href="https://cadastro.museus.gov.br/painel-analitico/" title="Acessar Museus.gov.br">Museus.gov.br</a> é um indício de como o tema ainda é negligenciado pelas instituições.</p>
+        <p>Investimentos em políticas públicas, capacitação de gestores e priorização da acessibilidade são ações importantes para transformar esse cenário, uma vez que o <span class="destaque">acesso à cultura é um direito de todos nós</span>.</p>
+        <hr>
+        <h2>Explore os dados</h2>
+        <p>Confira a seguir as informações obtidas:</p>
+        <div class="interactive">
+            <div class="button-container-zero">
+                <button id="btn-geral">Geral</button>
+                <button id="btn-por_regiao">Por região</button>
+                <button id="btn-por_estado">Por estado</button>
+                <button id="btn-por_esfera">Esfera Pública X Privada</button>
+            </div>
+            <div class="chart-container-zero">
+                <!--Acessibilidade nos museus BR-->
+                <iframe title="Acessibilidade disponível nos museus brasileiros" aria-label="Bar Chart" id="datawrapper-chart-n47hC" class="active-zero" src="https://datawrapper.dwcdn.net/n47hC/3/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="312" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+                </script>
+                <!--Acessibilidade por região-->
+                <iframe title="Recursos e estrutura de acessibilidade nos museus por região" aria-label="Grouped Bars" id="datawrapper-chart-128bL" src="https://datawrapper.dwcdn.net/128bL/4/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="1350" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+                </script>
+                <!--Museus por estado-->
+                <iframe title="Recursos e estrutura de acessibilidade nos museus por estado" aria-label="Grouped Bars" id="datawrapper-chart-P8IMH" src="https://datawrapper.dwcdn.net/P8IMH/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="6163" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+                </script>
+                <!--Museus por esfera-->
+                <iframe title="Recursos e estrutura de acessibilidade nos museus por esfera Pública X Privada" aria-label="Grouped Bars" id="datawrapper-chart-b4Biz" src="https://datawrapper.dwcdn.net/b4Biz/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="2882" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
+                </script>
+            </div>
+        </div>
+        <hr>
+        <h3>Metodologia</h3>
+        <div class="metodologia">
+        <p>Para essa matéria foi consultada a base pública de dados disponível em <a href="https://cadastro.museus.gov.br/painel-analitico/" title="Acessar Museus.gov.br">Museus.gov.br</a> em 06/jan/2025 e, a partir dela, foi realizado o levantamento com raspagem de dados de cada uma das 4.005 URLs dos museus cadastrados, obtendo as informações sobre recursos e infraestrutura de acessibidade.</p>
+        <p>A classificação utilizada foi:</p>
+        <ul>
+            <li><span class="destaque">Possui recursos ou infraestrutura</span> = qualquer unidade com ao menos uma informação sobre acessobilidade, podendo ser um recurso ou a infraestrutura física do local.</li>
+            <li><span class="destaque">Não possui nenhum recurso ou infraestrutura</span> = unidades onde as informações de acessibilidade é apresentada como <strong><em>"- Não possui -"</em></strong></li>
+            <li><span class="destaque">Não há informação disponível para consultar</span> = unidades onde as informações de acessibilidade é apresentada como <strong><em>"- Não informado -"</em></strong></li>
+            <li><span class="destaque">Não é possível classificar</span> = unidades onde as informações sobre acessibilidade estavam sem preenchimento, retornando um valor vazio, não sendo possível identificar se os dados são inexistentes, se não foram informados ou se o museu não possui recurso/infraestrutura de acessibilidade</li>
+        </ul>
+        <p><strong>Atualização em 13/jan/2025:</strong> O número atual de museus apresentado no site <a href="https://cadastro.museus.gov.br/painel-analitico/" title="Acessar Museus.gov.br">Museus.gov.br</a> foi atualizado, sendo agora de 3.998 registros. Os dados de acessibilidade também podem ter sofrido ajustes.</p>
+        </div>
+    </article>
+    </section>
+    <script src="javascript.js"></script>
+</body>
+</html>
