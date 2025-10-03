@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuiMA: GUIA DE MUSEUS ACESSÍVEIS DO BRASIL</title>
+    
+    <!-- Bibliotecas do Mapa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1e5ba8;
+            --bg-secondary: #999;
+            --text-primary: #ffffff;
+            --text-dark: #333;
+            --button-bg: #1e5ba8;
+            --button-border: #ffffff;
+            --button-hover: #164a8c;
+            --logo-color: #1e5ba8;
+            --content-bg: #f5f5f5;
+            --focus-outline: #1e5ba8;
+        }
+
+        body.dark-mode {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --text-primary: #e0e0e0;
+            --text-dark: #e0e0e0;
+            --button-bg: #0f3460;
+            --button-border: #e94560;
+            --button-hover: #16213e;
+            --logo-color: #e94560;
+            --content-bg: #0f0f1e;
+            --focus-outline: #e94560;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: var(--content-bg);
+            color: var(--text-dark);
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        .skip-link {
+            color: var(--text-primary);
+            z-index: -10000;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 4px 8px;
+            transition: opacity 0.2s;
+        }
+
+        .skip-link:focus {
+            z-index: 10000;
+            outline: 2px solid var(--button-border);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .top-header {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 12px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .accessibility-controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .accessibility-controls button {
+            background: transparent;
+            color: var(--text-primary);
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 4px 8px;
+            transition: opacity 0.2s;
+        }
+
+        .accessibility-controls button:hover {
+            opacity: 0.8;
+        }
+
+        .accessibility-controls button:focus {
+            outline: 2px solid var(--button-border);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .main-header {
+            background-color: var(--text-primary);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode .main-header {
+            background-color: var(--bg-secondary);
+        }
+
+        .logo {
+            font-size: 64px;
+            font-weight: bold;
+            color: var(--logo-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .logo:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 4px;
+            border-radius: 8px;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            background-color: transparent;
+            color: var(--button-bg);
+            border: 2px solid var(--button-bg);
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        body.dark-mode .nav-button {
+            color: var(--text-primary);
+            border-color: var(--button-border);
+        }
+
+        .nav-button:hover,
+        .nav-button:focus {
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+        }
+
+        .nav-button:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .nav-button.active {
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .content-area {
+            background-color: var(--bg-secondary);
+            height: calc(100vh - 175px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .layout {
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        .filtro-container {
+            width: 25%;
+            background: var(--text-primary);
+            padding: 20px;
+            font-size: 14px;
+            overflow-y: auto;
+            border-right: 1px solid #ccc;
+            z-index: 100;
+        }
+
+        body.dark-mode .filtro-container {
+            background: var(--bg-primary);
+            border-right-color: var(--bg-secondary);
+        }
+
+        .filtro-container h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .filter-group {
+            margin-bottom: 24px;
+        }
+
+        .filter-group legend,
+        .filter-group > label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .filtro-container input[type="text"] {
+            flex: 1;
+            padding: 10px 12px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            background: var(--text-primary);
+            color: var(--text-dark);
+            transition: border-color 0.2s;
+        }
+
+        body.dark-mode .filtro-container input[type="text"] {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: #555;
+        }
+
+        .filtro-container input[type="text"]:focus {
+            outline: none;
+            border-color: var(--focus-outline);
+            box-shadow: 0 0 0 3px rgba(30, 91, 168, 0.1);
+        }
+
+        .clear-button {
+            padding: 10px 16px;
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--button-bg);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .clear-button:hover {
+            background-color: var(--button-hover);
+        }
+
+        .clear-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(30, 91, 168, 0.3);
+        }
+
+        .radio-group {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: var(--button-bg);
+        }
+
+        .radio-option input[type="radio"]:focus {
+            outline: 2px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .radio-option span {
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .filtro-container select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            background: var(--text-primary);
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .filtro-container select {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-color: #555;
+        }
+
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+
+        .autocomplete-items {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            border: 2px solid var(--focus-outline);
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: white;
+            z-index: 1001;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode .autocomplete-items {
+            background-color: var(--bg-secondary);
+        }
+
+        .autocomplete-items div {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .autocomplete-items div {
+            color: var(--text-primary);
+        }
+
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+        body.dark-mode .autocomplete-items div:hover {
+            background-color: #0f3460;
+        }
+
+        .autocomplete-items strong {
+            background-color: yellow;
+            color: #000;
+        }
+
+        .popup-title {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .badge-azul { background-color: #007bff; color: white; }
+        .badge-vermelho { background-color: #dc3545; color: white; }
+        .badge-laranja { background-color: #fd7e14; color: white; }
+        .badge-amarelo { background-color: #ffc107; color: #343a40; }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        #loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar-container {
+            width: 200px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #007bff;
+            border-radius: 5px;
+            transition: width 0.1s linear;
+        }
+
+        .back-to-top {
+            position: absolute;
+            left: -9999px;
+            background: var(--button-bg);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10000;
+            border-radius: 4px;
+        }
+
+        .back-to-top:focus {
+            position: fixed;
+            bottom: 40px;
+            left: 32px;
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .top-header, .main-header { padding: 15px 20px; }
+            .top-header { flex-direction: column; gap: 15px; }
+            .main-header { flex-direction: column; gap: 20px; }
+            .logo { font-size: 48px; }
+            .main-nav { flex-direction: column; width: 100%; }
+            .nav-button { width: 100%; }
+            .layout { flex-direction: column; }
+            .filtro-container { width: 100%; max-height: 400px; }
+            #map { height: 500px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Carregando dados...</div>
+        <div class="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+    </div>
+
+    
+
+    <header>
+        <div class="top-header">
+            <h1 class="site-title">GUIA DE MUSEUS ACESSÍVEIS DO BRASIL</h1>
+            <nav class="accessibility-controls" aria-label="Controles de acessibilidade">
+                <a href="#main-content" type="button" class="skip-link">Ir para o conteúdo principal</a>
+                <button id="darkModeToggle" type="button">Modo escuro</button>
+                <button id="increaseText" type="button">Aumentar texto</button>
+                <button id="decreaseText" type="button">Diminuir texto</button>
+            </nav>
+        </div>
+
+        <div class="main-header">
+            <a href="index.html" class="logo">GuiMA</a>
+            <nav id="main-nav" class="main-nav" aria-label="Menu principal">
+                <a href="mapa-de-museus.html" class="nav-button active">Mapa de museus</a>
+                <a href="analise-de-dados.html" class="nav-button">Análise de dados</a>
+                <a href="metodologia.html" class="nav-button">Metodologia</a>
+                <a href="sobre-o-projeto.html" class="nav-button">Sobre o projeto</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="content-area">
+        <div class="layout">
+            <aside class="filtro-container" role="complementary">
+                <h2>Filtros de busca</h2>
+
+                <div class="filter-group">
+                    <label for="filtro-nome">Nome do museu:</label>
+                    <div class="search-wrapper">
+                        <input id="filtro-nome" type="text" placeholder="Digite um museu..." autocomplete="off"/>
+                        <button type="button" id="limpar-nome" class="clear-button">Limpar</button>
+                    </div>
+                    <div id="autocomplete-list" class="autocomplete-items"></div>
+                </div>
+
+                <fieldset class="filter-group radio-group">
+                    <legend>Atividade:</legend>
+                    <label class="radio-option">
+                        <input type="radio" name="status" value="todos" checked/>
+                        <span>Todos</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="status" value="funcionando"/>
+                        <span>Funcionando</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="status" value="nao-funcionando"/>
+                        <span>Inativo</span>
+                    </label>
+                </fieldset>
+
+                <div class="filter-group">
+                    <label for="filtro-uf">Estado:</label>
+                    <select id="filtro-uf" multiple></select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filtro-acessibilidade">Acessibilidade:</label>
+                    <select id="filtro-acessibilidade" multiple></select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filtro-tematica">Temática:</label>
+                    <select id="filtro-tematica" multiple></select>
+                </div>
+
+                <a href="#main-nav" class="back-to-top">Voltar ao menu</a>
+            </aside>
+
+            <div id="map"></div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    
+    <script>
+        // Controle do modo escuro
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        function enableDarkMode() {
+            body.classList.add('dark-mode');
+            darkModeToggle.textContent = 'Modo claro';
+        }
+
+        function disableDarkMode() {
+            body.classList.remove('dark-mode');
+            darkModeToggle.textContent = 'Modo escuro';
+        }
+
+        const savedMode = localStorage.getItem('darkMode');
+        if (savedMode === 'enabled') {
+            enableDarkMode();
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            enableDarkMode();
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.textContent = 'Modo claro';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.textContent = 'Modo escuro';
+            }
+        });
+
+        // Controle de tamanho de texto
+        let currentFontSize = 100;
+        if (localStorage.getItem('fontSize')) {
+            currentFontSize = parseFloat(localStorage.getItem('fontSize'));
+            document.documentElement.style.fontSize = currentFontSize + '%';
+        }
+
+        document.getElementById('increaseText').addEventListener('click', () => {
+            if (currentFontSize < 150) {
+                currentFontSize += 12.5;
+                document.documentElement.style.fontSize = currentFontSize + '%';
+                localStorage.setItem('fontSize', currentFontSize);
+            }
+        });
+
+        document.getElementById('decreaseText').addEventListener('click', () => {
+            if (currentFontSize > 75) {
+                currentFontSize -= 12.5;
+                document.documentElement.style.fontSize = currentFontSize + '%';
+                localStorage.setItem('fontSize', currentFontSize);
+            }
+        });
+
+        // Mapa
+        const map = L.map('map').setView([-14.235, -51.9253], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const iconAberto = L.icon({
+            iconUrl: 'imgs/pin.png',
+            iconSize: [25, 25],
+            iconAnchor: [12, 12],
+            popupAnchor: [1, -14]
+        });
+        const iconFechado = L.icon({
+            iconUrl: 'imgs/pin-error.png',
+            iconSize: [25, 25],
+            iconAnchor: [12, 12],
+            popupAnchor: [1, -14]
+        });
+        const iconManual = L.icon({
+            iconUrl: 'imgs/pin-uncheck.png',
+            iconSize: [25, 25],
+            iconAnchor: [12, 12],
+            popupAnchor: [1, -14]
+        });
+        const iconWarn = L.icon({
+            iconUrl: 'imgs/pin-warn.png',
+            iconSize: [25, 25],
+            iconAnchor: [12, 12],
+            popupAnchor: [1, -14]
+        });
+
+        const estadosMap = {
+            AC: "Acre", AL: "Alagoas", AP: "Amapá", AM: "Amazonas",
+            BA: "Bahia", CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo",
+            GO: "Goiás", MA: "Maranhão", MT: "Mato Grosso", MS: "Mato Grosso do Sul",
+            MG: "Minas Gerais", PA: "Pará", PB: "Paraíba", PR: "Paraná",
+            PE: "Pernambuco", PI: "Piauí", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte",
+            RS: "Rio Grande do Sul", RO: "Rondônia", RR: "Roraima", SC: "Santa Catarina",
+            SP: "São Paulo", SE: "Sergipe", TO: "Tocantins"
+        };
+
+        let dadosMuseus = [], dadosEnderecos = [], dadosAcessibilidade = [], dadosTematica = [];
+        const marcadores = [];
+        let marcadoresVisiveis = L.featureGroup().addTo(map);
+        let choicesUF, choicesAcessibilidade, choicesTematica, fuse, titulosUnicos = [];
+
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const progressBar = document.getElementById('progress-bar');
+        const loadingText = document.querySelector('.loading-text');
+
+        function showLoading(text = 'Carregando...', progress = 0) {
+            loadingText.textContent = text;
+            progressBar.style.width = `${progress}%`;
+            loadingOverlay.classList.remove('hidden');
+        }
+
+        function updateProgress(progress, text = null) {
+            setTimeout(() => {
+                progressBar.style.width = `${progress}%`;
+                if (text) loadingText.textContent = text;
+            }, 50);
+        }
+
+        function hideLoading() {
+            setTimeout(() => loadingOverlay.classList.add('hidden'), 200);
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+        }
+
+        function criarMarcadores() {
+            marcadoresVisiveis.clearLayers();
+            marcadores.length = 0;
+
+            dadosMuseus.forEach(museu => {
+                const endereco = dadosEnderecos.find(e => e.ID === museu.ID);
+                const acess = dadosAcessibilidade.find(a => a.ID === museu.ID);
+                const tematica = dadosTematica.find(t => t.ID === museu.ID);
+                
+                if (!endereco || !endereco.Localização) return;
+
+                const local = (endereco.Localização || '').replace(/"/g, '').trim();
+                const match = local.match(/(-?\d+\.?\d*),\s*(-?\d+\.?\d*)/);
+                if (!match || match.length < 3) return;
+
+                const lat = parseFloat(match[1]);
+                const lng = parseFloat(match[2]);
+                if (isNaN(lat) || isNaN(lng)) return;
+
+                const status = (museu['Status do Museu'] || '').toLowerCase().trim();
+                const geoManual = (endereco['Geolocalização manual'] || '').toLowerCase();
+                
+                const recursosAcessibilidade = [];
+                let possuiQualquerAcessibilidade = false;
+                if (acess) {
+                    Object.entries(acess).forEach(([chave, valor]) => {
+                        if (chave !== 'ID' && parseInt(valor, 10) === 1) {
+                            recursosAcessibilidade.push(chave);
+                            possuiQualquerAcessibilidade = true;
+                        }
+                    });
+                }
+
+                let icon;
+                if (status === 'fechado') icon = iconFechado;
+                else if (!possuiQualquerAcessibilidade) icon = iconWarn;
+                else if (geoManual === 'true') icon = iconManual;
+                else icon = iconAberto;
+
+                const statusBadge = status === 'fechado' ? '<span class="badge badge-vermelho">Inativo</span>' : '<span class="badge badge-azul">Funcionando</span>';
+                const geoBadge = geoManual === 'true' ? '<span class="badge badge-laranja">Localização imprecisa</span>' : '';
+                const acessBadge = !possuiQualquerAcessibilidade ? '<span class="badge badge-amarelo">Sem acessibilidade</span>' : '';
+
+                const enderecoCompleto = [endereco.Logradouro, endereco.Número, endereco.Complemento, endereco.Bairro, endereco.CEP, `${endereco.Município} - ${endereco.UF}`].filter(Boolean).join(', ');
+                const acessInfo = recursosAcessibilidade.length ? `<div><strong>Acessibilidade:</strong> ${recursosAcessibilidade.join(', ')}</div>` : '<div><strong>Acessibilidade:</strong> Sem recursos</div>';
+
+                const temasMuseu = [];
+                if (tematica) {
+                    Object.entries(tematica).forEach(([chave, valor]) => {
+                        if (chave !== 'ID' && chave !== 'Não disponível' && chave !== 'Não informado' && parseInt(valor, 10) === 1) {
+                            temasMuseu.push(chave);
+                        }
+                    });
+                }
+
+                const tematicaInfo = temasMuseu.length ? `<div><strong>Temática:</strong> ${temasMuseu.join(', ')}</div>` : '';
+
+                const popupContent = `
+                    <div class="popup-title">${escapeHtml(museu['Título'])}</div>
+                    <div>${statusBadge} ${geoBadge} ${acessBadge}</div>
+                    <div><strong>Endereço:</strong> ${escapeHtml(enderecoCompleto)}</div>
+                    ${acessInfo}
+                    ${tematicaInfo}
+                `;
+
+                const marker = L.marker([lat, lng], { icon }).bindPopup(popupContent);
+
+                marcadores.push({
+                    marker, status, uf: endereco.UF,
+                    nome: (museu['Título'] || '').toLowerCase(),
+                    acess: recursosAcessibilidade,
+                    possuiQualquerAcessibilidade,
+                    tematica: temasMuseu,
+                    lat, lng
+                });
+            });
+
+            aplicarFiltros();
+        }
+
+        function aplicarFiltros(callback = null) {
+            showLoading('Aplicando filtros...', 0);
+
+            setTimeout(() => {
+                marcadoresVisiveis.clearLayers();
+                const statusSelecionado = document.querySelector('input[name="status"]:checked').value;
+                const ufsSelecionadas = choicesUF.getValue(true);
+                const acessSelecionadas = choicesAcessibilidade.getValue(true);
+                const tematicaSelecionadas = choicesTematica.getValue(true);
+                const nomeSelecionado = document.getElementById('filtro-nome').value.trim().toLowerCase();
+
+                const filtrarPorNaoPossuiAcessibilidade = acessSelecionadas.includes('Não possui');
+                const acessRecursosSelecionados = acessSelecionadas.filter(f => f !== 'Não possui');
+
+                const visiveisBounds = [];
+
+                marcadores.forEach(({ marker, status, uf, nome, acess, possuiQualquerAcessibilidade, tematica, lat, lng }) => {
+                    const correspondeStatus = statusSelecionado === 'todos' || 
+                        (statusSelecionado === 'funcionando' && status === 'aberto') ||
+                        (statusSelecionado === 'nao-funcionando' && status === 'fechado');
+
+                    const correspondeUF = ufsSelecionadas.length === 0 || ufsSelecionadas.includes(uf);
+                    const correspondeNome = nomeSelecionado === '' || nome.includes(nomeSelecionado);
+
+                    let correspondeAcess;
+                    if (filtrarPorNaoPossuiAcessibilidade) {
+                        correspondeAcess = !possuiQualquerAcessibilidade;
+                    } else {
+                        correspondeAcess = acessRecursosSelecionados.length === 0 || 
+                            acessRecursosSelecionados.every(f => acess.includes(f));
+                    }
+
+                    const correspondeTematica = tematicaSelecionadas.length === 0 || 
+                        tematicaSelecionadas.every(t => tematica.includes(t));
+
+                    if (correspondeStatus && correspondeUF && correspondeNome && correspondeAcess && correspondeTematica) {
+                        marcadoresVisiveis.addLayer(marker);
+                        visiveisBounds.push([lat, lng]);
+                    }
+                });
+
+                if (visiveisBounds.length > 0) {
+                    const bounds = L.latLngBounds(visiveisBounds);
+                    map.fitBounds(bounds, { padding: [30, 30] });
+                } else {
+                    map.setView([-14.235, -51.9253], 4);
+                }
+                
+                hideLoading();
+                if (callback) callback();
+            }, 0);
+        }
+
+        document.querySelectorAll('input[name="status"]').forEach(radio => {
+            radio.addEventListener('change', aplicarFiltros);
+        });
+
+        showLoading('Preparando...', 0);
+        Promise.all([
+            new Promise(res => Papa.parse('main.csv', {
+                download: true, header: true, skipEmptyLines: true,
+                complete: result => {
+                    updateProgress(20, 'Carregando Museus...');
+                    res(result.data.map(d => ({ ...d, ID: d.ID.trim() })));
+                }
+            })),
+            new Promise(res => Papa.parse('endereco_museus.csv', {
+                download: true, header: true, skipEmptyLines: true,
+                complete: result => {
+                    updateProgress(40, 'Carregando Endereços...');
+                    res(result.data.map(d => ({ ...d, ID: d.ID.trim() })));
+                }
+            })),
+            new Promise(res => Papa.parse('filtro_infra_recursos_acessibilidade.csv', {
+                download: true, header: true, skipEmptyLines: true,
+                complete: result => {
+                    updateProgress(60, 'Carregando Acessibilidade...');
+                    res(result.data.map(d => ({ ...d, ID: d.ID.trim() })));
+                }
+            })),
+            new Promise(res => Papa.parse('tematica_museu.csv', {
+                download: true, header: true, skipEmptyLines: true,
+                complete: result => {
+                    updateProgress(80, 'Carregando Temáticas...');
+                    res(result.data.map(d => ({ ...d, ID: d.ID.trim() })));
+                }
+            }))
+        ]).then(([museus, enderecos, acessibilidade, tematica]) => {
+            dadosMuseus = museus;
+            dadosEnderecos = enderecos;
+            dadosAcessibilidade = acessibilidade;
+            dadosTematica = tematica;
+
+            updateProgress(90, 'Inicializando filtros...');
+
+            const selectUF = document.getElementById('filtro-uf');
+            const ufsUnicas = [...new Set(enderecos.map(e => e.UF).filter(Boolean))].sort();
+            const optionsUF = ufsUnicas.map(sigla => ({
+                value: sigla,
+                label: estadosMap[sigla] || sigla
+            }));
+            choicesUF = new Choices(selectUF, {
+                choices: optionsUF,
+                removeItemButton: true,
+                placeholderValue: 'Selecione estados...',
+                searchPlaceholderValue: 'Buscar estado...',
+                itemSelectText: '',
+                noResultsText: 'Nenhum estado encontrado'
+            });
+            choicesUF.passedElement.element.addEventListener('change', () => {
+                aplicarFiltros();
+                choicesUF.hideDropdown();
+            });
+
+            const selectAcess = document.getElementById('filtro-acessibilidade');
+            const todasChavesAcessibilidade = Object.keys(acessibilidade[0]).filter(c => 
+                c !== 'ID' && c.trim() !== '' && !c.toLowerCase().includes('não possui')
+            );
+
+            const optionsAcess = [{ value: 'Não possui', label: 'Não possui' }];
+            todasChavesAcessibilidade.forEach(item => {
+                optionsAcess.push({ value: item, label: item });
+            });
+
+            choicesAcessibilidade = new Choices(selectAcess, {
+                choices: optionsAcess,
+                removeItemButton: true,
+                placeholderValue: 'Infraestrutura e recursos...',
+                searchPlaceholderValue: 'Buscar recurso...',
+                itemSelectText: '',
+                noResultsText: 'Nenhum recurso encontrado'
+            });
+            choicesAcessibilidade.passedElement.element.addEventListener('change', () => {
+                aplicarFiltros();
+                choicesAcessibilidade.hideDropdown();
+            });
+
+            const selectTematica = document.getElementById('filtro-tematica');
+            const todasChavesTematica = Object.keys(tematica[0]).filter(c => 
+                c !== 'ID' && c !== 'Não disponível' && c !== 'Não informado' && c.trim() !== ''
+            );
+
+            const optionsTematica = todasChavesTematica.map(item => ({
+                value: item,
+                label: item
+            }));
+            choicesTematica = new Choices(selectTematica, {
+                choices: optionsTematica,
+                removeItemButton: true,
+                placeholderValue: 'Selecione...',
+                searchPlaceholderValue: 'Buscar temática...',
+                itemSelectText: '',
+                noResultsText: 'Nenhuma temática encontrada'
+            });
+            choicesTematica.passedElement.element.addEventListener('change', () => {
+                aplicarFiltros();
+                choicesTematica.hideDropdown();
+            });
+
+            titulosUnicos = [...new Set(museus.map(m => m['Título']).filter(Boolean))].sort();
+
+            fuse = new Fuse(titulosUnicos.map(t => ({ title: t })), {
+                includeMatches: true,
+                threshold: 0.4,
+                keys: ['title']
+            });
+
+            const inputNome = document.getElementById('filtro-nome');
+            const autocompleteList = document.getElementById('autocomplete-list');
+
+            inputNome.addEventListener('input', function() {
+                const val = this.value.trim();
+                autocompleteList.innerHTML = '';
+                if (val.length < 3) return;
+
+                const resultados = fuse.search(val, { limit: 10 });
+                resultados.forEach(res => {
+                    const title = res.item.title;
+                    const matches = res.matches[0];
+                    let label = '';
+                    if (matches) {
+                        let lastIndex = 0;
+                        matches.indices.forEach(([start, end]) => {
+                            label += escapeHtml(title.substring(lastIndex, start));
+                            label += '<strong>' + escapeHtml(title.substring(start, end + 1)) + '</strong>';
+                            lastIndex = end + 1;
+                        });
+                        label += escapeHtml(title.substring(lastIndex));
+                    } else {
+                        label = escapeHtml(title);
+                    }
+
+                    const div = document.createElement('div');
+                    div.innerHTML = label;
+                    div.addEventListener('click', function() {
+                        inputNome.value = title;
+                        autocompleteList.innerHTML = '';
+                        
+                        const tituloSelecionado = title.toLowerCase();
+                        aplicarFiltros(() => {
+                            const museuSelecionado = marcadores.find(m => m.nome === tituloSelecionado);
+                            if (museuSelecionado && museuSelecionado.marker) {
+                                marcadoresVisiveis.addLayer(museuSelecionado.marker);
+                                map.setView(museuSelecionado.marker.getLatLng(), 15);
+                                museuSelecionado.marker.openPopup();
+                            }
+                        });
+                    });
+                    autocompleteList.appendChild(div);
+                });
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target !== inputNome) {
+                    autocompleteList.innerHTML = '';
+                }
+            });
+
+            updateProgress(100, 'Preparando mapa...');
+            criarMarcadores();
+        }).catch(error => {
+            console.error("Erro ao carregar arquivos CSV:", error);
+            loadingText.textContent = 'Erro ao carregar dados. Recarregue a página.';
+            progressBar.style.width = '0%';
+        });
+
+        document.getElementById('limpar-nome').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('filtro-nome').value = '';
+            document.getElementById('autocomplete-list').innerHTML = '';
+            aplicarFiltros();
+        });
+    </script>
+</body>
+</html>
