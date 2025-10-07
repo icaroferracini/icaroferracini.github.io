@@ -1848,9 +1848,9 @@ checkbox.addEventListener('keydown', (e) => {
     const filtered = getFilteredMuseums();
 
     const isInitialLoad = state.markersLayer && state.markersLayer.getLayers().length === 0;
-    if (filtered.length > 25 || isInitialLoad) {
-        showLoading();
-    }
+if (filtered.length > 25 || isInitialLoad) {
+    showLoading();
+}
 
     // ✅ Atualiza o contador IMEDIATAMENTE (FORA do setTimeout)
     document.getElementById('museumCounter').textContent =
