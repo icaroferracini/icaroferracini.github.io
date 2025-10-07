@@ -7,7 +7,7 @@
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
-    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.css" />
     <style>
         * {
             margin: 0;
@@ -38,18 +38,6 @@
             --content-bg: #0f0f0f;
             --focus-outline: #ffcd07;
         }
-        /* ADICIONE ESTAS LINHAS APÓS body.dark-mode */
-body:not(.dark-mode) {
-    --bg-primary: #1351b4 !important;
-    --bg-secondary: #f8f9fa !important;
-    --text-primary: #ffffff !important;
-    --text-secondary: #111 !important;
-    --link: #1351b4 !important;
-    --button-bg: #1351b4 !important;
-    --button-text: #ffffff !important;
-    --content-bg: #ffffff !important;
-    --focus-outline: #ffcd07 !important;
-}
 
         html {
             font-size: 100%;
@@ -1387,7 +1375,7 @@ body.dark-mode .guima-nearby-museums {
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
-    
+    <script src="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.js"></script>
     <script>
         const darkModeToggle = document.getElementById('darkModeToggle');
         const body = document.body;
@@ -2060,14 +2048,12 @@ checkbox.addEventListener('keydown', (e) => {
     
 
     content += `</div>`;
-
-            if (museum.tematica && museum.tematica !== 'Não informado') {
+    if (museum.tematica && museum.tematica !== 'Não informado') {
         content += `<div class="guima-modal-info-item" role="listitem">
             <span class="guima-modal-info-label" id="tematica-label-${museum.id}">Temática</span>
             <span class="guima-modal-info-value" aria-labelledby="tematica-label-${museum.id}">${museum.tematica}</span>
         </div>`;
     }
-    
     if (museum.descricao) {
         content += `<div class="guima-modal-section">
             <h3 class="guima-modal-section-title">Descrição</h3>
@@ -2512,7 +2498,33 @@ function setupNearbyCardsEvents(filteredMuseums) {
             }
         });
 
-        state.map = L.map('map').setView([-14.235, -51.925], 4);
+        const isMobile = window.innerWidth <= 1024;
+
+state.map = L.map('map', {
+    dragging: true,
+    tap: true,
+    scrollWheelZoom: !isMobile,
+    gestureHandling: isMobile,
+    gestureHandlingOptions: isMobile ? {
+        text: {
+            touch: "Use dois dedos para mover o mapa",
+            scroll: "Segure a tecla ctrl para aproximar o mapa",
+            scrollMac: "Segure a tecla ⌘ para aproximar o mapa"
+        },
+        duration: 5000
+    } : {}
+}).setView([-14.235, -51.925], 4);
+
+// Ajusta comportamento ao redimensionar (sem reload)
+window.addEventListener('resize', () => {
+    const nowMobile = window.innerWidth <= 1024;
+    
+    if (nowMobile) {
+        state.map.scrollWheelZoom.disable();
+    } else {
+        state.map.scrollWheelZoom.enable();
+    }
+});
 
         const lightTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
@@ -2537,8 +2549,4 @@ function setupNearbyCardsEvents(filteredMuseums) {
         loadCSVData();
     </script>
 </body>
-
 </html>
-
-
-
