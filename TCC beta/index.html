@@ -1846,12 +1846,16 @@ checkbox.addEventListener('keydown', (e) => {
 
         function updateMap() {
     const filtered = getFilteredMuseums();
-    
-    // Mostra loading apenas se tiver mais de 50 museus
-    if (filtered.length > 25) {
+
+    const isInitialLoad = state.markersLayer && state.markersLayer.getLayers().length === 0;
+    if (filtered.length > 25 || isInitialLoad) {
         showLoading();
     }
-    
+
+    // ✅ Atualiza o contador IMEDIATAMENTE (FORA do setTimeout)
+    document.getElementById('museumCounter').textContent =
+        `Mostrando ${filtered.length} de ${state.museums.length} museus`;
+
     setTimeout(() => {
         if (state.markersLayer) {
             state.markersLayer.clearLayers();
@@ -1860,8 +1864,8 @@ checkbox.addEventListener('keydown', (e) => {
         filtered.forEach(museum => {
             let iconClass = 'marker-info-insuficiente';
             let iconSymbol = '?';
-            
-            switch(museum.statusAcessibilidade) {
+
+            switch (museum.statusAcessibilidade) {
                 case 'Acessível':
                     iconClass = 'marker-acessivel';
                     iconSymbol = '✓';
@@ -1880,7 +1884,7 @@ checkbox.addEventListener('keydown', (e) => {
                     iconSymbol = '?';
                     break;
             }
-            
+
             const customIcon = L.divIcon({
                 className: 'custom-div-icon',
                 html: `<div class="custom-marker ${iconClass}">
@@ -1890,32 +1894,32 @@ checkbox.addEventListener('keydown', (e) => {
                 iconAnchor: [22, 44],
                 popupAnchor: [0, -44]
             });
-            
+
             const marker = L.marker([museum.localizacao.lat, museum.localizacao.lng], {
-    icon: customIcon
-}).on('click', () => showModal(museum, filtered));
-            
+                icon: customIcon
+            }).on('click', () => showModal(museum, filtered));
+
             marker.addTo(state.markersLayer);
-            
-           setTimeout(() => {
-    const markerElement = marker.getElement();
-    if (markerElement) {
-        const markerId = `marker-${museum.id}`;
-        markerElement.setAttribute('id', markerId);
-        markerElement.setAttribute('role', 'button');
-        markerElement.setAttribute('tabindex', '0');
-        markerElement.setAttribute('aria-label', 
-            `${museum.titulo}, ${museum.municipio}, ${museum.estado}. Nível de acessibilidade: ${museum.statusAcessibilidade}`
-        );
-        
-        markerElement.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                showModal(museum, filtered);  // ✅ CORRETO: passa os museus filtrados
-            }
-        });
-    }
-}, 0);
+
+            setTimeout(() => {
+                const markerElement = marker.getElement();
+                if (markerElement) {
+                    const markerId = `marker-${museum.id}`;
+                    markerElement.setAttribute('id', markerId);
+                    markerElement.setAttribute('role', 'button');
+                    markerElement.setAttribute('tabindex', '0');
+                    markerElement.setAttribute('aria-label',
+                        `${museum.titulo}, ${museum.municipio}, ${museum.estado}. Nível de acessibilidade: ${museum.statusAcessibilidade}`
+                    );
+
+                    markerElement.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            showModal(museum, filtered);
+                        }
+                    });
+                }
+            }, 0);
         });
 
         if (filtered.length > 0) {
@@ -1925,11 +1929,14 @@ checkbox.addEventListener('keydown', (e) => {
             state.map.setView([-14.235, -51.925], 4);
         }
 
-        document.getElementById('museumCounter').textContent = 
-            `Mostrando ${filtered.length} de ${state.museums.length} museus`;
+        // Aguarda renderização completa dos marcadores
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                hideLoading();
+            });
+        });
         
-        hideLoading();
-    }, filtered.length > 25 ? 100 : 0);
+    }, filtered.length > 25 || isInitialLoad ? 100 : 0);
 }
 
         function updateFilters() {
