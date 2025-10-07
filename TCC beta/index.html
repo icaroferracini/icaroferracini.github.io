@@ -2045,14 +2045,16 @@ checkbox.addEventListener('keydown', (e) => {
         </div>`;
     }
 
-    if (museum.tematica && museum.tematica !== 'Não informado') {
+    
+
+    content += `</div>`;
+
+            if (museum.tematica && museum.tematica !== 'Não informado') {
         content += `<div class="guima-modal-info-item" role="listitem">
             <span class="guima-modal-info-label" id="tematica-label-${museum.id}">Temática</span>
             <span class="guima-modal-info-value" aria-labelledby="tematica-label-${museum.id}">${museum.tematica}</span>
         </div>`;
     }
-
-    content += `</div>`;
     
     if (museum.descricao) {
         content += `<div class="guima-modal-section">
@@ -2525,3 +2527,4 @@ function setupNearbyCardsEvents(filteredMuseums) {
 </body>
 
 </html>
+
