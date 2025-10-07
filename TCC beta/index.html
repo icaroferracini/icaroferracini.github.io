@@ -2498,22 +2498,28 @@ function setupNearbyCardsEvents(filteredMuseums) {
             }
         });
 
-        const isMobile = window.innerWidth <= 1024;
+        // Detecta se é mobile
+const isMobile = window.innerWidth <= 1024;
 
-state.map = L.map('map', {
-    dragging: true,
-    tap: true,
-    scrollWheelZoom: !isMobile,
-    gestureHandling: isMobile,
-    gestureHandlingOptions: isMobile ? {
-        text: {
-            touch: "Use dois dedos para mover o mapa",
-            scroll: "Segure a tecla ctrl para aproximar o mapa",
-            scrollMac: "Segure a tecla ⌘ para aproximar o mapa"
-        },
-        duration: 5000
-    } : {}
-}).setView([-14.235, -51.925], 4);
+// Aguarda o plugin carregar
+if (isMobile && typeof L.Map.addInitHook === 'function') {
+    state.map = L.map('map', {
+        gestureHandling: true,
+        gestureHandlingOptions: {
+            text: {
+                touch: "Use dois dedos para mover o mapa",
+                scroll: "Segure a tecla ctrl para aproximar o mapa",
+                scrollMac: "Segure a tecla ⌘ para aproximar o mapa"
+            },
+            duration: 5000
+        }
+    }).setView([-14.235, -51.925], 4);
+} else {
+    // Desktop ou fallback
+    state.map = L.map('map', {
+        scrollWheelZoom: true
+    }).setView([-14.235, -51.925], 4);
+}
 
 // Ajusta comportamento ao redimensionar (sem reload)
 window.addEventListener('resize', () => {
@@ -2550,3 +2556,4 @@ window.addEventListener('resize', () => {
     </script>
 </body>
 </html>
+
