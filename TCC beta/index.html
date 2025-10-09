@@ -1295,10 +1295,10 @@
         }
         .leaflet-control-zoom-in, 
         .leaflet-control-zoom-out {
-            font-size: 1rem !important;
-            min-width: 56px !important;
-            min-height: 56px !important;
-            padding: 0.75rem !important;
+            font-size: 1rem;
+            min-width: 56px;
+            min-height: 56px;
+            padding: 0.75rem;
         }
     </style>
 </head>
@@ -2840,9 +2840,9 @@
                 gestureHandling: true,
                 gestureHandlingOptions: {
                     text: {
-                        touch: "Use dois dedos para mover, aproximar ou afastar o mapa",
-                        scroll: "Segure Ctrl para aproximar",
-                        scrollMac: "Segure ⌘ para aproximar"
+                        touch: "Use dois dedos para mover, ampliar ou reduzir o mapa",
+                        scroll: "Segure a tecla CTRL para ampliar ou reduzir o mapa",
+                        scrollMac: "Segure a tecla ⌘ para ampliar ou reduzir o mapa"
                     },
                     duration: 5000
                 },
@@ -2981,9 +2981,6 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-
-        
-
         
 
         // ✅ CARREGA OS DADOS
@@ -2992,5 +2989,3 @@ document.addEventListener('keydown', function (e) {
 </body>
 
 </html>
-
-
