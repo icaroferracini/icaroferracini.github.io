@@ -22,7 +22,7 @@
 
         :root {
             --bg-primary: #1351b4;
-            --bg-secondary: #f8f9fa;
+            --bg-secondary: #ebebeb;
             --text-primary: #ffffff;
             --text-secondary: #111;
             --link: #1351b4;
@@ -34,7 +34,7 @@
 
         body.dark-mode {
             --bg-primary: #071d41;
-            --bg-secondary: #1a1a1a;
+            --bg-secondary: #3b3b3b;
             --text-primary: #f8f9fa;
             --text-secondary: #e0e0e0;
             --link: #6bb3ff;
@@ -1183,6 +1183,62 @@
             outline: 3px solid var(--focus-outline);
             outline-offset: 2px;
         }
+        .leaflet-control-zoom-in,
+        .leaflet-control-zoom-out {
+            font-size: 1rem;
+            min-width: 56px;
+            min-height: 56px;
+            padding: 0.75rem;
+        }
+
+
+        .article-section {
+            margin: 1rem auto;
+            background: var(--content-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .map-legend {
+            display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  list-style: none;
+  padding: 0;
+  justify-items: stretch;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-item .custom-marker {
+            max-width: 32px;
+            max-height: 32px;
+            min-width: 32px;
+            min-height: 32px;
+            transform: rotate(-45deg);
+        }
+
+        .legend-item .custom-marker-inner {
+            font-size: 14px;
+            display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-start;
+        }
+        .custom-marker:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .legend-item .custom-marker {
+            box-shadow: none;
+    }
 
         @keyframes spin {
             to {
@@ -1292,21 +1348,19 @@
             .content-area {
                 padding: 0.5rem;
             }
+.map-legend {
+    grid-template-columns: repeat(1, 1fr); /* 2 colunas no tablet/mobile */
+  }
         }
-        .leaflet-control-zoom-in, 
-        .leaflet-control-zoom-out {
-            font-size: 1rem;
-            min-width: 56px;
-            min-height: 56px;
-            padding: 0.75rem;
-        }
+
+        
     </style>
 </head>
 
 <body>
     <header>
         <div class="top-header">
-            <h1 class="site-title">GUIA DE MUSEUS ACESSÍVEIS DO BRASIL</h1>
+            <h1 class="site-title">GUIA DE MUSEUS ACESSÍVEIS DO BRASIL (beta)</h1>
             <nav class="accessibility-controls" aria-label="Controles de acessibilidade">
                 <a href="#main-content" class="skip-link" tabindex="0">Ir para o conteúdo</a>
                 <button id="darkModeToggle" tabindex="0" aria-label="Alternar modo escuro">🌙 Modo escuro</button>
@@ -1314,23 +1368,68 @@
                 <button id="decreaseText" tabindex="0" aria-label="Diminuir tamanho do texto">🔽 Diminuir texto</button>
             </nav>
         </div>
-<!--
-        <div class="main-header">
+
+        <!--<div class="main-header">
             <a href="#" class="logo" tabindex="0" aria-label="Guima - Página inicial">GuiMA</a>
             <nav id="main-nav" class="main-nav" aria-label="Menu principal">
                 <a href="index.html" class="nav-button active" tabindex="0">Mapa de museus</a>
                 <a href="analise-de-dados.html" class="nav-button" tabindex="0">Análise de dados</a>
                 <a href="metodologia.html" class="nav-button" tabindex="0">Metodologia</a>
             </nav>
-        </div>
-        -->
+        </div>-->
+
     </header>
 
     <main id="main-content" class="content-area">
+
+        <section class="article-section" aria-labelledby="legendaTitulo">
+            <h2 id="legendaTitulo" class="guima-filters-title">Legenda do mapa</h2>
+
+            <p>Cada ícone representa o nível de acessibilidade dos museus.</p>
+
+            <ul class="map-legend" role="list">
+                <li class="legend-item">
+                    <div class="custom-marker marker-acessivel" tabindex="0">
+                        <div class="custom-marker-inner"
+                            aria-label="Imagem de marcador verde com um visto dentro: Acessível — museu com acessibilidade completa">
+                            ✓</div>
+                    </div>
+                    <span aria-label="hidden">Acessível — museu com acessibilidade completa</span>
+                </li>
+                <li class="legend-item">
+                    <div class="custom-marker marker-parcial" tabindex="0">
+                        <div class="custom-marker-inner"
+                            aria-label="Imagem de marcador amarelo com uma exclamação dentro: Parcialmente acessível — possui alguns recursos de acessibilidade">
+                            !</div>
+                    </div>
+                    <span aria-label="hidden">Parcialmente acessível — possui alguns recursos de acessibilidade</span>
+                </li>
+                <li class="legend-item">
+                    <div class="custom-marker marker-sem-recursos" tabindex="0">
+                        <div class="custom-marker-inner"
+                            aria-label="Imagem de marcador vermelho com um x dentro: Sem recursos de acessibilidade disponíveis">
+                            ✕</div>
+                    </div>
+                    <span aria-label="hidden">Sem recursos de acessibilidade disponíveis</span>
+                </li>
+                <li class="legend-item">
+                    <div class="custom-marker marker-info-insuficiente" tabindex="0">
+                        <div class="custom-marker-inner"
+                            aria-label="Imagem de marcador cinza com uma interrogação dentro: Informações de acessibilidade não disponíveis">
+                            ?</div>
+                    </div>
+                    <span aria-label="hidden">Informações de acessibilidade não disponíveis</span>
+                </li>
+            </ul>
+        </section>
+
+
+
+
         <div id="app">
             <div class="guima-map-container" id="mapContainer">
                 <div class="guima-filters-section" id="filtersSection">
-                    <h2 class="guima-filters-title">Busque por um museu</h2>
+                    <!--<h2 class="guima-filters-title">Busque por um museu</h2>-->
 
                     <div class="guima-filter-controls">
                         <button class="guima-clear-button" id="clearFilters" aria-label="Limpar todos os filtros">Limpar
@@ -1339,8 +1438,8 @@
                             Carregando...</div>
                     </div>
 
-                    <div class="guima-filter-group" id="searchGroup" role="search" >
-                        <label class="guima-filter-label" for="searchInput" >Buscar museu por nome</label>
+                    <div class="guima-filter-group" id="searchGroup" role="search">
+                        <label class="guima-filter-label" for="searchInput">Buscar museu por nome</label>
                         <div style="position: relative;">
                             <svg class="guima-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -1348,8 +1447,8 @@
                                 <path d="m21 21-4.35-4.35"></path>
                             </svg>
                             <input type="text" id="searchInput" class="guima-search-input"
-                                placeholder="Digite aqui o nome do museu..." >
-                           
+                                placeholder="Digite aqui o nome do museu...">
+
                         </div>
                         <div id="suggestions" class="guima-suggestions hidden" role="listbox" aria-expanded="false">
                         </div>
@@ -1373,7 +1472,7 @@
                         <label class="guima-filter-label" for="acessibilidadeButton">Nível de Acessibilidade</label>
                         <button class="guima-select-button" id="acessibilidadeButton" aria-haspopup="listbox"
                             aria-expanded="false">
-                            
+
                         </button>
                         <div id="acessibilidadeDropdown" class="guima-dropdown hidden" role="listbox">
                             <div id="acessibilidadeOptions"></div>
@@ -1406,9 +1505,9 @@
                     </div>
 
                     <div class="guima-filter-group">
-                        <label class="guima-filter-label">Status de Funcionamento</label>
+                        <label class="guima-filter-label">Condição de Funcionamento</label>
                         <div class="guima-radio-group full-width" id="statusRadioGroup" role="radiogroup"
-                            aria-label="Status de Funcionamento">
+                            aria-label="Condição de Funcionamento">
                             <div class="guima-radio-option">
                                 <input type="radio" id="statusTodos" name="status" value="" checked>
                                 <label for="statusTodos" class="guima-radio-label">
@@ -1486,7 +1585,8 @@
                 <div class="guima-modal" onclick="event.stopPropagation()">
                     <div class="guima-modal-header">
                         <h2 class="guima-modal-title" id="modalTitle" tabindex="-1"></h2>
-                        <button class="guima-modal-close" id="modalClose" aria-label="Fechar modal">×</button>
+                        <button class="guima-modal-close" id="modalClose"
+                            aria-label="Fechar modal com informações do museu">×</button>
                     </div>
                     <div class="guima-modal-content" id="modalContent"></div>
                 </div>
@@ -1513,7 +1613,7 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.js"></script>
     <script>
-        
+
 
         // ========== FUNÇÕES DE ACESSIBILIDADE ==========
 
@@ -1934,9 +2034,22 @@
                 },
                 'acessibilidade': (item) => {
                     state.selectedAcessibilidade = state.selectedAcessibilidade.filter(a => a !== item);
-                    updateButtonTags('acessibilidade', state.selectedAcessibilidade, getRemoveCallback('acessibilidade', state.selectedAcessibilidade));
-                    createMultiSelect('acessibilidade', state.filterOptions.statusAcessibilidade, state.selectedAcessibilidade);
+
+                    updateButtonTags(
+                        'acessibilidade',
+                        state.selectedAcessibilidade,
+                        getRemoveCallback('acessibilidade', state.selectedAcessibilidade)
+                    );
+
+                    // Definir a ordem desejada explicitamente
+                    const ordemDesejada = ["Acessível", "Parcialmente Acessível", "Sem acessibilidade", "Informação Insuficiente"];
+
+                    // Ordenar as opções para que apareçam na ordem desejada
+                    const opcoesOrdenadas = ordemDesejada.filter(o => state.filterOptions.statusAcessibilidade.includes(o));
+
+                    createMultiSelect('acessibilidade', opcoesOrdenadas, state.selectedAcessibilidade);
                 },
+
                 'recursos': (item) => {
                     state.selectedRecursos = state.selectedRecursos.filter(r => r !== item);
                     updateButtonTags('recursos', state.selectedRecursos, getRemoveCallback('recursos', state.selectedRecursos));
@@ -2068,7 +2181,7 @@
             const icons = {
                 'Acessível': { iconClass: 'marker-acessivel', iconSymbol: '✓' },
                 'Parcialmente Acessível': { iconClass: 'marker-parcial', iconSymbol: '!' },
-                'Sem Recursos': { iconClass: 'marker-sem-recursos', iconSymbol: '✕' },
+                'Sem acessibilidade': { iconClass: 'marker-sem-recursos', iconSymbol: '✕' },
                 'default': { iconClass: 'marker-info-insuficiente', iconSymbol: '?' }
             };
             return icons[status] || icons['default'];
@@ -2113,9 +2226,9 @@
                     };
 
                     marker.on('click', function () {
-  lastFocusedLayer = marker;        // guarda o layer (marker)
-  showModal(museum, filtered);
-});
+                        lastFocusedLayer = marker;        // guarda o layer (marker)
+                        showModal(museum, filtered);
+                    });
 
 
                     marker.on('add', function () {
@@ -2129,12 +2242,12 @@
                             );
 
                             markerElement.addEventListener('keydown', function (e) {
-  if (e.key === 'Enter' || e.key === ' ') {
-    e.preventDefault();
-    lastFocusedLayer = marker;      // garante que salvamos o layer também no teclado
-    showModal(museum, filtered);
-  }
-});
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    lastFocusedLayer = marker;      // garante que salvamos o layer também no teclado
+                                    showModal(museum, filtered);
+                                }
+                            });
                         }
                     });
 
@@ -2188,20 +2301,20 @@
             switch (museum.statusAcessibilidade) {
                 case 'Acessível':
                     headerClass = 'header-acessivel';
-                    nivelTexto = 'Acessível';
+                    nivelTexto = 'Possui acessibilidade';
                     break;
                 case 'Parcialmente Acessível':
                     headerClass = 'header-parcial';
-                    nivelTexto = 'Parcialmente Acessível';
+                    nivelTexto = 'Possui acessibilidade parcial';
                     break;
-                case 'Sem Recursos':
+                case 'Sem acessibilidade':
                     headerClass = 'header-sem-recursos';
-                    nivelTexto = 'Sem Recursos';
+                    nivelTexto = 'Sem acessibilidade';
                     break;
                 case 'Informação Insuficiente':
                 default:
                     headerClass = 'header-info-insuficiente';
-                    nivelTexto = 'Informação Insuficiente';
+                    nivelTexto = 'Sem informação sobre acessibilidade';
                     break;
             }
 
@@ -2227,16 +2340,19 @@
 
             if (museum.statusFuncionamento) {
                 let badgeClass = '';
+                let statusFuncionamentoMuseu = '';
                 if (museum.statusFuncionamento.toLowerCase() === 'ativo') {
                     badgeClass = 'ativo';
+                    statusFuncionamentoMuseu = 'Funcionando normalmente';
                 } else if (museum.statusFuncionamento.toLowerCase() === 'inativo') {
                     badgeClass = 'inativo';
+                    statusFuncionamentoMuseu = 'Não está funcionando';
                 }
 
                 content += `<div class="guima-modal-info-item" role="listitem">
-                    <span class="guima-modal-info-label" id="status-label-${museum.id}">Status de Funcionamento</span>
+                    <span class="guima-modal-info-label" id="status-label-${museum.id}">Funcionamento</span>
                     <span class="guima-modal-info-value" aria-labelledby="status-label-${museum.id}">
-                        ${badgeClass ? `<span class="guima-status-badge ${badgeClass}">${museum.statusFuncionamento}</span>` : museum.statusFuncionamento}
+                        ${badgeClass ? `<span class="guima-status-badge ${badgeClass}">${statusFuncionamentoMuseu}</span>` : museum.statusFuncionamento}
                     </span>
                 </div>`;
             }
@@ -2387,7 +2503,7 @@
                 if (nearbyMuseums.length > 0) {
                     content += `
                         <div class="guima-nearby-museums">
-                            <h3 class="guima-nearby-title">Outros museus disponíveis nos filtros atuais</h3>
+                            <h3 class="guima-nearby-title">Confira informações de acessibilidade em museus próximos:</h3>
                             <div class="guima-nearby-grid">
                     `;
 
@@ -2402,7 +2518,7 @@
                                     aria-label="Ver detalhes de ${nearby.titulo}, distância aproximada de ${distanceKm} quilômetros">
                                 <div class="guima-nearby-card-name">${nearby.titulo}</div>
                                 <span class="guima-nearby-card-badge ${badgeClass}">
-                                    ${badgeSymbol} ${nearby.statusAcessibilidade || 'Não informado'}
+                                <!--${badgeSymbol}--> ${nearby.statusAcessibilidade || 'Não informado'}
                                 </span>
                                 <div class="guima-nearby-card-distance">Distância aproximada: ${distanceKm} km</div>
                             </button>
@@ -2489,7 +2605,7 @@
             switch (status) {
                 case 'Acessível': return 'acessivel';
                 case 'Parcialmente Acessível': return 'parcial';
-                case 'Sem Recursos': return 'sem-recursos';
+                case 'Sem acessibilidade': return 'sem-recursos';
                 default: return 'info-insuficiente';
             }
         }
@@ -2498,7 +2614,7 @@
             const icons = {
                 'Acessível': { iconClass: 'marker-acessivel', iconSymbol: '✓' },
                 'Parcialmente Acessível': { iconClass: 'marker-parcial', iconSymbol: '!' },
-                'Sem Recursos': { iconClass: 'marker-sem-recursos', iconSymbol: '✕' },
+                'Sem acessibilidade': { iconClass: 'marker-sem-recursos', iconSymbol: '✕' },
                 'default': { iconClass: 'marker-info-insuficiente', iconSymbol: '?' }
             };
             return icons[status] || icons['default'];
@@ -2509,7 +2625,7 @@
             switch (status) {
                 case 'Acessível': return '✓';
                 case 'Parcialmente Acessível': return '!';
-                case 'Sem Recursos': return '✕';
+                case 'Sem acessibilidade': return '✕';
                 default: return '?';
             }
         }
@@ -2526,84 +2642,84 @@
             });
         }
 
-       function openModal() {
-  const modalElement = document.getElementById('modal');
+        function openModal() {
+            const modalElement = document.getElementById('modal');
 
-  // Salva o elemento que estava com foco no momento
-  lastFocusedElement = document.activeElement;
+            // Salva o elemento que estava com foco no momento
+            lastFocusedElement = document.activeElement;
 
-  // Mostra o modal
-  modalElement.classList.remove('hidden');
-  modalElement.setAttribute('aria-modal', 'true');
-  document.body.style.overflow = 'hidden';
+            // Mostra o modal
+            modalElement.classList.remove('hidden');
+            modalElement.setAttribute('aria-modal', 'true');
+            document.body.style.overflow = 'hidden';
 
-  // Move foco para o modal ou para o primeiro botão nele
-  modalElement.querySelector('button, [tabindex="0"], a, input, select, textarea')?.focus();
-}
-
-       function closeModal() {
-  const modalElement = document.getElementById('modal');
-  const previousFocusId = modalElement.dataset.previousFocus;
-
-  modalElement.classList.add('hidden');
-
-  // ✅ Acessibilidade
-  document.body.style.overflow = '';
-  announceToScreenReader('Modal fechado');
-
-  // 1) Tenta focar o layer salvo (marker ou cluster)
-  if (lastFocusedLayer) {
-    // Delay curto para cobrir casos onde o DOM do marker/cluster foi recriado
-    setTimeout(() => {
-      try {
-        const el = (typeof lastFocusedLayer.getElement === 'function')
-          ? lastFocusedLayer.getElement()
-          : lastFocusedLayer; // caso seja uma referência DOM por algum motivo
-
-        if (el) {
-          // se dentro do elemento houver um filho com role=button (nos clusters usamos <div role="button">), foca ele
-          const focusable = el.querySelector && el.querySelector('[role="button"]') || el;
-          if (focusable && typeof focusable.focus === 'function') {
-            focusable.focus();
-            lastFocusedLayer = null;
-            return;
-          }
+            // Move foco para o modal ou para o primeiro botão nele
+            modalElement.querySelector('button, [tabindex="0"], a, input, select, textarea')?.focus();
         }
-      } catch (err) {
-        console.warn('Erro ao restaurar foco no layer:', err);
-      }
 
-      // se não foi possível focar, tenta fallback por id
-      if (previousFocusId) {
-        const previousElement = document.getElementById(previousFocusId);
-        if (previousElement) {
-          previousElement.focus();
-          lastFocusedLayer = null;
-          return;
+        function closeModal() {
+            const modalElement = document.getElementById('modal');
+            const previousFocusId = modalElement.dataset.previousFocus;
+
+            modalElement.classList.add('hidden');
+
+            // ✅ Acessibilidade
+            document.body.style.overflow = '';
+            announceToScreenReader('Modal fechado');
+
+            // 1) Tenta focar o layer salvo (marker ou cluster)
+            if (lastFocusedLayer) {
+                // Delay curto para cobrir casos onde o DOM do marker/cluster foi recriado
+                setTimeout(() => {
+                    try {
+                        const el = (typeof lastFocusedLayer.getElement === 'function')
+                            ? lastFocusedLayer.getElement()
+                            : lastFocusedLayer; // caso seja uma referência DOM por algum motivo
+
+                        if (el) {
+                            // se dentro do elemento houver um filho com role=button (nos clusters usamos <div role="button">), foca ele
+                            const focusable = el.querySelector && el.querySelector('[role="button"]') || el;
+                            if (focusable && typeof focusable.focus === 'function') {
+                                focusable.focus();
+                                lastFocusedLayer = null;
+                                return;
+                            }
+                        }
+                    } catch (err) {
+                        console.warn('Erro ao restaurar foco no layer:', err);
+                    }
+
+                    // se não foi possível focar, tenta fallback por id
+                    if (previousFocusId) {
+                        const previousElement = document.getElementById(previousFocusId);
+                        if (previousElement) {
+                            previousElement.focus();
+                            lastFocusedLayer = null;
+                            return;
+                        }
+                    }
+
+                    // fallback final: foco no mapa
+                    const mapElement = document.getElementById('map');
+                    if (mapElement) mapElement.focus();
+                    lastFocusedLayer = null;
+                }, 50); // 50ms costuma ser suficiente; pode ajustar (20-200ms) conforme necessidade
+                return;
+            }
+
+            // 2) Se não há lastFocusedLayer, tenta fallback por id (sua lógica original)
+            if (previousFocusId) {
+                const previousElement = document.getElementById(previousFocusId);
+                if (previousElement) {
+                    previousElement.focus();
+                    return;
+                }
+            }
+
+            // 3) fallback final: foco no mapa
+            const mapElement = document.getElementById('map');
+            if (mapElement) mapElement.focus();
         }
-      }
-
-      // fallback final: foco no mapa
-      const mapElement = document.getElementById('map');
-      if (mapElement) mapElement.focus();
-      lastFocusedLayer = null;
-    }, 50); // 50ms costuma ser suficiente; pode ajustar (20-200ms) conforme necessidade
-    return;
-  }
-
-  // 2) Se não há lastFocusedLayer, tenta fallback por id (sua lógica original)
-  if (previousFocusId) {
-    const previousElement = document.getElementById(previousFocusId);
-    if (previousElement) {
-      previousElement.focus();
-      return;
-    }
-  }
-
-  // 3) fallback final: foco no mapa
-  const mapElement = document.getElementById('map');
-  if (mapElement) mapElement.focus();
-}
 
 
 
@@ -2889,99 +3005,102 @@
 
         // ✅ CLUSTERING: MarkerClusterGroup para performance
         // 📍 Criação da camada de clusters com acessibilidade nativa
-state.markersLayer = L.markerClusterGroup({
-  maxClusterRadius: 50,
-  spiderfyOnMaxZoom: true,
-  showCoverageOnHover: false,
-  zoomToBoundsOnClick: true,
-  chunkedLoading: true,
-  chunkInterval: 200,
-  chunkDelay: 50,
+        state.markersLayer = L.markerClusterGroup({
+            maxClusterRadius: 50,
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            chunkedLoading: true,
+            chunkInterval: 200,
+            chunkDelay: 50,
 
-  iconCreateFunction: function (cluster) {
-    const count = cluster.getChildCount();
-    let sizeClass = 'small';
-    if (count > 100) sizeClass = 'large';
-    else if (count > 10) sizeClass = 'medium';
+            iconCreateFunction: function (cluster) {
+                const count = cluster.getChildCount();
+                let sizeClass = 'small';
+                if (count > 100) sizeClass = 'large';
+                else if (count > 10) sizeClass = 'medium';
 
-    // --- 📊 Calcula a descrição acessível ---
-    const markers = cluster.getAllChildMarkers();
-    const municipios = {};
+                // --- 📊 Calcula a descrição acessível ---
+                const markers = cluster.getAllChildMarkers();
+                const municipios = {};
 
-    markers.forEach(marker => {
-      if (marker.museumData && marker.museumData.municipio) {
-        const key = `${marker.museumData.municipio}, ${marker.museumData.estadoComp}`;
-        municipios[key] = (municipios[key] || 0) + 1;
-      }
-    });
+                markers.forEach(marker => {
+                    if (marker.museumData && marker.museumData.municipio) {
+                        const key = `${marker.museumData.municipio}, ${marker.museumData.estadoComp}`;
+                        municipios[key] = (municipios[key] || 0) + 1;
+                    }
+                });
 
-    // 📌 Encontra o município mais frequente no cluster
-    let mainLocation = '';
-    let maxCount = 0;
-    for (const [location, locationCount] of Object.entries(municipios)) {
-      if (locationCount > maxCount) {
-        maxCount = locationCount;
-        mainLocation = location;
-      }
-    }
+                // 📌 Encontra o município mais frequente no cluster
+                let mainLocation = '';
+                let maxCount = 0;
+                for (const [location, locationCount] of Object.entries(municipios)) {
+                    if (locationCount > maxCount) {
+                        maxCount = locationCount;
+                        mainLocation = location;
+                    }
+                }
 
-    // 🧠 Monta o aria-label
-    let ariaLabel = '';
-    if (mainLocation) {
-      if (Object.keys(municipios).length === 1) {
-        ariaLabel = `${count} museus em ${mainLocation}. Pressione Enter para expandir`;
-      } else {
-        ariaLabel = `${count} museus, principalmente em ${mainLocation}. Pressione Enter para expandir`;
-      }
-    } else {
-      ariaLabel = `Grupo de ${count} museus. Pressione Enter para expandir`;
-    }
+                // 🧠 Monta o aria-label
+                let ariaLabel = '';
+                if (mainLocation) {
+                    if (Object.keys(municipios).length === 1) {
+                        ariaLabel = `${count} museus em ${mainLocation}. Pressione Enter para expandir`;
+                    } else {
+                        ariaLabel = `${count} museus, principalmente em ${mainLocation}. Pressione Enter para expandir`;
+                    }
+                } else {
+                    ariaLabel = `Grupo de ${count} museus. Pressione Enter para expandir`;
+                }
 
-    // ✅ ACESSIBILIDADE: Clusters navegáveis por teclado com localização
-        state.markersLayer.on('clustermouseover clusteradd', function (e) {
-            const cluster = e.layer;
-            const clusterElement = cluster.getElement();
+                // ✅ ACESSIBILIDADE: Clusters navegáveis por teclado com localização
+                state.markersLayer.on('clustermouseover clusteradd', function (e) {
+                    const cluster = e.layer;
+                    const clusterElement = cluster.getElement();
 
-            
-        });
 
-    // --- 🪄 Retorna o ícone acessível ---
-    return L.divIcon({
-      html: `
+                });
+
+                // --- 🪄 Retorna o ícone acessível ---
+                return L.divIcon({
+                    html: `
         <div class="btgrupo" role="button" tabindex="-1" aria-label="${ariaLabel}">
           ${count}
         </div>
       `,
-      className: `marker-cluster marker-cluster-${sizeClass}`,
-      iconSize: L.point(40, 40)
-    });
-  }
-}).addTo(state.map);
+                    className: `marker-cluster marker-cluster-${sizeClass}`,
+                    iconSize: L.point(40, 40)
+                });
+            }
+        }).addTo(state.map);
 
-document.addEventListener('keydown', function (e) {
-  // Verifica se o alvo do foco está DENTRO de um marker cluster
-  const clusterButton = e.target.closest('.btgrupo');
-  if ((e.key === 'Enter' || e.key === ' ') && clusterButton) {
-    e.preventDefault();
+        document.addEventListener('keydown', function (e) {
+            // Verifica se o alvo do foco está DENTRO de um marker cluster
+            const clusterButton = e.target.closest('.btgrupo');
+            if ((e.key === 'Enter' || e.key === ' ') && clusterButton) {
+                e.preventDefault();
 
-    // Encontrar o layer correspondente ao elemento clicado
-    const cluster = state.markersLayer.getLayers().find(layer =>
-      layer.getElement && layer.getElement() === clusterButton
-    );
+                // Encontrar o layer correspondente ao elemento clicado
+                const cluster = state.markersLayer.getLayers().find(layer =>
+                    layer.getElement && layer.getElement() === clusterButton
+                );
 
-    if (cluster) {
-      cluster.zoomToBounds();
+                if (cluster) {
+                    cluster.zoomToBounds();
 
-      const ariaLabel = clusterButton.querySelector('[aria-label]')?.getAttribute('aria-label') 
-                      || clusterButton.getAttribute('aria-label');
-      if (ariaLabel) {
-        announceToScreenReader(ariaLabel.replace('Pressione Enter para expandir', 'Expandindo'));
-      }
-    }
-  }
-});
+                    const ariaLabel = clusterButton.querySelector('[aria-label]')?.getAttribute('aria-label')
+                        || clusterButton.getAttribute('aria-label');
+                    if (ariaLabel) {
+                        announceToScreenReader(ariaLabel.replace('Pressione Enter para expandir', 'Expandindo'));
+                    }
+                }
+            }
+        });
 
-        
+
+
+
+
 
         // ✅ CARREGA OS DADOS
         loadCSVData();
