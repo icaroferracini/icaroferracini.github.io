@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa de Museus - GUIA DE MUSEUS ACESSÍVEIS DO BRASIL - Em desenvolvimento</title>
-    
-    <!-- Leaflet CSS -->
+    <title>Mapa de Museus - GUIA DE MUSEUS ACESSÍVEIS DO BRASIL - GuiMA</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet"
+        href="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.css" />
+
     <style>
         * {
             margin: 0;
@@ -193,7 +198,7 @@
             background: var(--content-bg);
             padding: 2rem;
             border-radius: 0.5rem;
-            /*box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);*/
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
         .guima-filters-section {
@@ -352,17 +357,17 @@
             min-height: 3rem;
         }
 
-        .guima-radio-option input[type="radio"]:checked + .guima-radio-label {
+        .guima-radio-option input[type="radio"]:checked+.guima-radio-label {
             border-color: var(--button-bg);
             background-color: var(--content-bg);
         }
 
-        .guima-radio-option input[type="radio"]:hover + .guima-radio-label {
+        .guima-radio-option input[type="radio"]:hover+.guima-radio-label {
             border-color: var(--button-bg);
             opacity: 0.8;
         }
 
-        .guima-radio-option input[type="radio"]:focus + .guima-radio-label {
+        .guima-radio-option input[type="radio"]:focus+.guima-radio-label {
             outline: 3px solid var(--focus-outline);
             outline-offset: 2px;
         }
@@ -379,7 +384,7 @@
             transition: all 0.2s ease;
         }
 
-        .guima-radio-option input[type="radio"]:checked + .guima-radio-label .guima-radio-indicator {
+        .guima-radio-option input[type="radio"]:checked+.guima-radio-label .guima-radio-indicator {
             border-color: var(--button-bg);
             background-color: var(--button-bg);
         }
@@ -395,7 +400,7 @@
             transition: all 0.2s ease;
         }
 
-        .guima-radio-option input[type="radio"]:checked + .guima-radio-label .guima-radio-indicator::after {
+        .guima-radio-option input[type="radio"]:checked+.guima-radio-label .guima-radio-indicator::after {
             opacity: 1;
             transform: scale(1);
         }
@@ -412,7 +417,7 @@
             max-height: 250px;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .guima-dropdown-search {
@@ -483,12 +488,12 @@
             z-index: 0;
         }
 
-        .guima-dropdown-checkbox:checked + .guima-checkbox-visual {
+        .guima-dropdown-checkbox:checked+.guima-checkbox-visual {
             background-color: var(--button-bg);
             border-color: var(--button-bg);
         }
 
-        .guima-dropdown-checkbox:checked + .guima-checkbox-visual::after {
+        .guima-dropdown-checkbox:checked+.guima-checkbox-visual::after {
             content: '✓';
             color: var(--button-text);
             font-size: 0.75rem;
@@ -512,7 +517,7 @@
             max-height: 200px;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .guima-suggestion-item {
@@ -586,7 +591,7 @@
             min-height: 600px;
             border-radius: 0.5rem;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
         }
 
@@ -602,7 +607,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -617,7 +622,7 @@
             width: 100%;
             max-height: 90vh;
             overflow: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .guima-modal-header {
@@ -651,31 +656,31 @@
         }
 
         .guima-status-badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-align: center;
-}
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-align: center;
+        }
 
-.guima-status-badge.ativo {
-    background-color: #1351b4;
-    color: #ffffff;
-}
+        .guima-status-badge.ativo {
+            background-color: #1351b4;
+            color: #ffffff;
+        }
 
-.guima-status-badge.inativo {
-    background-color: #dc3545;
-    color: #ffffff;
-}
+        .guima-status-badge.inativo {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
 
-body.dark-mode .guima-status-badge.ativo {
-    background-color: #2968d8;
-}
+        body.dark-mode .guima-status-badge.ativo {
+            background-color: #2968d8;
+        }
 
-body.dark-mode .guima-status-badge.inativo {
-    background-color: #e63946;
-}
+        body.dark-mode .guima-status-badge.inativo {
+            background-color: #e63946;
+        }
 
         .guima-modal-accessibility-text {
             margin: 0;
@@ -855,7 +860,7 @@ body.dark-mode .guima-status-badge.inativo {
             border-radius: 50% 50% 50% 0;
             transform: rotate(-45deg);
             border: 2px solid white;
-            /*box-shadow: 0 3px 6px rgba(0,0,0,0.3);*/
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -875,8 +880,8 @@ body.dark-mode .guima-status-badge.inativo {
         .marker-parcial {
             background-color: #ffc107;
         }
-        
-        .marker-parcial div{
+
+        .marker-parcial div {
             color: #000;
         }
 
@@ -892,7 +897,7 @@ body.dark-mode .guima-status-badge.inativo {
         .custom-marker:focus {
             transform: rotate(-45deg) scale(1.5);
             z-index: 1000 !important;
-            /*box-shadow: 0 4px 12px rgba(0,0,0,0.4);*/
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
 
         .leaflet-marker-icon:focus {
@@ -913,7 +918,6 @@ body.dark-mode .guima-status-badge.inativo {
             border: 0;
         }
 
-        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -942,170 +946,252 @@ body.dark-mode .guima-status-badge.inativo {
             margin: 0 auto 1rem;
         }
 
-        /* Navegação entre museus no modal */
-.guima-modal-navigation {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    background-color: var(--bg-secondary);
-    border-top: 1px solid rgba(0,0,0,0.1);
-    align-items: center;
-}
+        .guima-modal-navigation {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background-color: var(--bg-secondary);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            align-items: center;
+        }
 
-body.dark-mode .guima-modal-navigation {
-    border-top: 1px solid rgba(255,255,255,0.1);
-}
+        body.dark-mode .guima-modal-navigation {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-.guima-nav-button {
-    padding: 0.5rem 1rem;
-    background-color: var(--button-bg);
-    color: var(--button-text);
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-}
+        .guima-nav-button {
+            padding: 0.5rem 1rem;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
 
-.guima-nav-button:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: scale(1.05);
-}
+        .guima-nav-button:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
 
-.guima-nav-button:focus {
-    outline: 3px solid var(--focus-outline);
-    outline-offset: 2px;
-}
+        .guima-nav-button:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
 
-.guima-nav-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
+        .guima-nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
 
-.guima-nav-info {
-    flex: 1;
-    text-align: center;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
+        .guima-nav-info {
+            flex: 1;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
 
-/* Cards de preview dos museus vizinhos */
-/* Cards de sugestão de museus próximos */
-.guima-nearby-museums {
-    padding: 1.5rem;
-    background-color: var(--bg-secondary);
-    border-top: 1px solid rgba(0,0,0,0.1);
-    margin-top: 1.5rem;
-}
+        .guima-nearby-museums {
+            padding: 1.5rem;
+            background-color: var(--bg-secondary);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            margin-top: 1.5rem;
+        }
 
-body.dark-mode .guima-nearby-museums {
-    border-top: 1px solid rgba(255,255,255,0.1);
-}
+        body.dark-mode .guima-nearby-museums {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-.guima-nearby-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 0.75rem;
-}
+        .guima-nearby-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
 
-.guima-nearby-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 0.75rem;
-    overflow-y: auto;
-}
+        .guima-nearby-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+            overflow-y: auto;
+        }
 
-.guima-nearby-card {
-    background-color: var(--content-bg);
-    border: 2px solid var(--bg-secondary);
-    border-radius: 0.5rem;
-    padding: 0.75rem;
-    margin: 0.25rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    text-align: left;
-}
+        .guima-nearby-card {
+            background-color: var(--content-bg);
+            border: 2px solid var(--bg-secondary);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left;
+        }
 
-.guima-nearby-card:hover {
-    border-color: var(--button-bg);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
+        .guima-nearby-card:hover {
+            border-color: var(--button-bg);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-.guima-nearby-card:focus {
-    outline: 3px solid var(--focus-outline);
-    outline-offset: 2px;
-    border-color: var(--button-bg);
-}
+        .guima-nearby-card:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+            border-color: var(--button-bg);
+        }
 
-.guima-nearby-card-name {
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
+        .guima-nearby-card-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
 
-.guima-nearby-card-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: white;
-    width: fit-content;
-}
+        .guima-nearby-card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            width: fit-content;
+        }
 
-.guima-nearby-card-badge.acessivel {
-    background-color: #28a745;
-}
+        .guima-nearby-card-badge.acessivel {
+            background-color: #28a745;
+        }
 
-.guima-nearby-card-badge.parcial {
-    background-color: #ffc107;
-    color: #000;
-}
+        .guima-nearby-card-badge.parcial {
+            background-color: #ffc107;
+            color: #000;
+        }
 
-.guima-nearby-card-badge.sem-recursos {
-    background-color: #dc3545;
-}
+        .guima-nearby-card-badge.sem-recursos {
+            background-color: #dc3545;
+        }
 
-.guima-nearby-card-badge.info-insuficiente {
-    background-color: #6c757d;
-}
+        .guima-nearby-card-badge.info-insuficiente {
+            background-color: #6c757d;
+        }
 
-.guima-nearby-card-tematica {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    opacity: 0.8;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
+        .guima-nearby-card-tematica {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
 
-.guima-nearby-card-distance {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    opacity: 0.8;
-    font-weight: 500;
-}
+        .guima-nearby-card-distance {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        /* ✅ NOVOS ESTILOS PARA CLUSTERING (mantendo sua identidade visual) */
+        .marker-cluster {
+            background: rgba(19, 81, 180, 0.6);
+            border-radius: 50%;
+        }
+
+        .marker-cluster div {
+            width: 30px;
+            height: 30px;
+            margin: 5px;
+            text-align: center;
+            border-radius: 50%;
+            background: var(--button-bg);
+            color: var(--button-text);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .marker-cluster-small,
+        .marker-cluster-medium,
+        .marker-cluster-large,
+        body.dark-mode .marker-cluster {
+            background: rgba(19, 81, 180, 0.5);
+        }
+
+        .marker-cluster-small div,
+        .marker-cluster-medium div,
+        .marker-cluster-large div,
+        body.dark-mode .marker-cluster div {
+            background: var(--button-bg);
+            opacity: 1;
+        }
+
+        /* ✅ MENSAGEM DE ERRO (seguindo seu padrão) */
+        .error-message {
+            background: #fee;
+            border: 2px solid #dc3545;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1rem;
+            color: #600;
+        }
+
+        body.dark-mode .error-message {
+            background: #2d0a0e;
+            border-color: #e63946;
+            color: #ffb3ba;
+        }
+
+        .error-message h2 {
+            margin-top: 0;
+            color: #dc3545;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        body.dark-mode .error-message h2 {
+            color: #ff6b77;
+        }
+
+        .error-message button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        .error-message button:hover {
+            opacity: 0.9;
+        }
+
+        .error-message button:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         @media (max-width: 1024px) {
+
             .top-header,
             .main-header {
                 padding: 1rem 1.25rem;
@@ -1181,11 +1267,11 @@ body.dark-mode .guima-nearby-museums {
             .footer {
                 padding: 0.75rem 1.25rem;
             }
-            
+
             .guima-map-container {
                 flex-direction: column;
             }
-            
+
             .guima-filters-section {
                 max-width: 100%;
             }
@@ -1202,17 +1288,18 @@ body.dark-mode .guima-nearby-museums {
             .guima-radio-label {
                 width: 100%;
             }
+
             .content-area {
-            padding: 0.5rem;
-        }
+                padding: 0.5rem;
+            }
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
+
 <body>
     <header>
         <div class="top-header">
-            <h1 class="site-title">GUIA DE MUSEUS ACESSÍVEIS DO BRASIL (em desennvolvimento)</h1>
+            <h1 class="site-title">GUIA DE MUSEUS ACESSÍVEIS DO BRASIL</h1>
             <nav class="accessibility-controls" aria-label="Controles de acessibilidade">
                 <a href="#main-content" class="skip-link" tabindex="0">Ir para o conteúdo</a>
                 <button id="darkModeToggle" tabindex="0" aria-label="Alternar modo escuro">🌙 Modo escuro</button>
@@ -1220,14 +1307,13 @@ body.dark-mode .guima-nearby-museums {
                 <button id="decreaseText" tabindex="0" aria-label="Diminuir tamanho do texto">🔽 Diminuir texto</button>
             </nav>
         </div>
-
-        <!--
+<!--
         <div class="main-header">
             <a href="#" class="logo" tabindex="0" aria-label="Guima - Página inicial">GuiMA</a>
             <nav id="main-nav" class="main-nav" aria-label="Menu principal">
-                <a href="#" class="nav-button active" tabindex="0">Mapa de museus</a>
-                <a href="#" class="nav-button" tabindex="0">Análise de dados</a>
-                <a href="#" class="nav-button" tabindex="0">Metodologia</a>
+                <a href="index.html" class="nav-button active" tabindex="0">Mapa de museus</a>
+                <a href="analise-de-dados.html" class="nav-button" tabindex="0">Análise de dados</a>
+                <a href="metodologia.html" class="nav-button" tabindex="0">Metodologia</a>
             </nav>
         </div>
         -->
@@ -1238,40 +1324,49 @@ body.dark-mode .guima-nearby-museums {
             <div class="guima-map-container" id="mapContainer">
                 <div class="guima-filters-section" id="filtersSection">
                     <h2 class="guima-filters-title">Busque por um museu</h2>
-                    
+
                     <div class="guima-filter-controls">
-                        <button class="guima-clear-button" id="clearFilters" aria-label="Limpar todos os filtros">Limpar filtros</button>
-                        <div class="guima-museum-counter" id="museumCounter" aria-live="polite" aria-atomic="true">Carregando...</div>
+                        <button class="guima-clear-button" id="clearFilters" aria-label="Limpar todos os filtros">Limpar
+                            filtros</button>
+                        <div class="guima-museum-counter" id="museumCounter" aria-live="polite" aria-atomic="true">
+                            Carregando...</div>
                     </div>
-                    
-                    <div class="guima-filter-group" id="searchGroup" role="search" aria-label="Busca de museus">
-                        <label class="guima-filter-label" for="searchInput">Buscar museu por nome</label>
+
+                    <div class="guima-filter-group" id="searchGroup" role="search" >
+                        <label class="guima-filter-label" for="searchInput" >Buscar museu por nome</label>
                         <div style="position: relative;">
-                            <svg class="guima-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <svg class="guima-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <path d="m21 21-4.35-4.35"></path>
                             </svg>
-                            <input type="text" id="searchInput" class="guima-search-input" placeholder="Digite aqui o nome do museu...">
+                            <input type="text" id="searchInput" class="guima-search-input"
+                                placeholder="Digite aqui o nome do museu..." >
+                           
                         </div>
-                        <div id="suggestions" class="guima-suggestions hidden" role="listbox"></div>
+                        <div id="suggestions" class="guima-suggestions hidden" role="listbox" aria-expanded="false">
+                        </div>
                         <div id="selectedMuseumsTags" class="guima-tags-container"></div>
                     </div>
 
                     <div class="guima-filter-group" id="estadosGroup">
                         <label class="guima-filter-label" for="estadosButton">Estado</label>
-                        <button class="guima-select-button" id="estadosButton" aria-haspopup="listbox" aria-expanded="false">
-                            <span class="guima-select-button-placeholder">Selecione...</span>
+                        <button class="guima-select-button" id="estadosButton" aria-haspopup="listbox"
+                            aria-expanded="false">
+                            <span class="guima-select-button-placeholder">Selecione uma ou mais opções...</span>
                         </button>
                         <div id="estadosDropdown" class="guima-dropdown hidden" role="listbox">
-                            <input type="text" class="guima-dropdown-search" id="estadosSearch" placeholder="Busque por um estado...">
+                            <input type="text" class="guima-dropdown-search" id="estadosSearch"
+                                placeholder="Busque por um estado...">
                             <div id="estadosOptions"></div>
                         </div>
                     </div>
 
                     <div class="guima-filter-group" id="acessibilidadeGroup">
                         <label class="guima-filter-label" for="acessibilidadeButton">Nível de Acessibilidade</label>
-                        <button class="guima-select-button" id="acessibilidadeButton" aria-haspopup="listbox" aria-expanded="false">
-                            <span class="guima-select-button-placeholder">Selecione...</span>
+                        <button class="guima-select-button" id="acessibilidadeButton" aria-haspopup="listbox"
+                            aria-expanded="false">
+                            
                         </button>
                         <div id="acessibilidadeDropdown" class="guima-dropdown hidden" role="listbox">
                             <div id="acessibilidadeOptions"></div>
@@ -1280,29 +1375,33 @@ body.dark-mode .guima-nearby-museums {
 
                     <div class="guima-filter-group" id="recursosGroup">
                         <label class="guima-filter-label" for="recursosButton">Recursos de Acessibilidade</label>
-                        <button class="guima-select-button" id="recursosButton" aria-haspopup="listbox" aria-expanded="false">
-                            <span class="guima-select-button-placeholder">Selecione...</span>
+                        <button class="guima-select-button" id="recursosButton" aria-haspopup="listbox"
+                            aria-expanded="false">
                         </button>
                         <div id="recursosDropdown" class="guima-dropdown hidden" role="listbox">
-                            <input type="text" class="guima-dropdown-search" id="recursosSearch" placeholder="Busque por um recurso ou infraestrutura...">
+                            <input type="text" class="guima-dropdown-search" id="recursosSearch"
+                                placeholder="Busque por um recurso...">
                             <div id="recursosOptions"></div>
                         </div>
                     </div>
 
                     <div class="guima-filter-group" id="tematicaGroup">
                         <label class="guima-filter-label" for="tematicaButton">Temática</label>
-                        <button class="guima-select-button" id="tematicaButton" aria-haspopup="listbox" aria-expanded="false">
+                        <button class="guima-select-button" id="tematicaButton" aria-haspopup="listbox"
+                            aria-expanded="false">
                             <span class="guima-select-button-placeholder">Selecione...</span>
                         </button>
                         <div id="tematicaDropdown" class="guima-dropdown hidden" role="listbox">
-                            <input type="text" class="guima-dropdown-search" id="tematicaSearch" placeholder="Busque por um tema...">
+                            <input type="text" class="guima-dropdown-search" id="tematicaSearch"
+                                placeholder="Busque por um tema...">
                             <div id="tematicaOptions"></div>
                         </div>
                     </div>
 
                     <div class="guima-filter-group">
                         <label class="guima-filter-label">Status de Funcionamento</label>
-                        <div class="guima-radio-group full-width" id="statusRadioGroup" role="radiogroup" aria-label="Status de Funcionamento">
+                        <div class="guima-radio-group full-width" id="statusRadioGroup" role="radiogroup"
+                            aria-label="Status de Funcionamento">
                             <div class="guima-radio-option">
                                 <input type="radio" id="statusTodos" name="status" value="" checked>
                                 <label for="statusTodos" class="guima-radio-label">
@@ -1315,24 +1414,53 @@ body.dark-mode .guima-nearby-museums {
 
                     <div class="guima-filter-group">
                         <label class="guima-filter-label">Visita com Guia</label>
-                        <div class="guima-radio-group full-width" id="visitaGuiaRadioGroup" role="radiogroup" aria-label="Visita com Guia">
+                        <div class="guima-radio-group full-width" id="visitaGuiaRadioGroup" role="radiogroup"
+                            aria-label="Visita com Guia">
                             <div class="guima-radio-option">
-                                <input type="radio" id="visitaTodos" name="visitaGuia" value="" checked aria-label="Mostrar todos os museus com e sem visita com guia">
+                                <input type="radio" id="visitaTodos" name="visitaGuia" value="" checked>
                                 <label for="visitaTodos" class="guima-radio-label">
                                     <span class="guima-radio-indicator"></span>
                                     <span>Todos</span>
                                 </label>
                             </div>
                             <div class="guima-radio-option">
-                                <input type="radio" id="visitaSim" name="visitaGuia" value="Sim" aria-label="Mostrar museus com visita com guia">
+                                <input type="radio" id="visitaSim" name="visitaGuia" value="Sim">
                                 <label for="visitaSim" class="guima-radio-label">
                                     <span class="guima-radio-indicator"></span>
                                     <span>Sim</span>
                                 </label>
                             </div>
                             <div class="guima-radio-option">
-                                <input type="radio" id="visitaNao" name="visitaGuia" value="Não" aria-label="Mostrar museus sem visita com guia">
+                                <input type="radio" id="visitaNao" name="visitaGuia" value="Não">
                                 <label for="visitaNao" class="guima-radio-label">
+                                    <span class="guima-radio-indicator"></span>
+                                    <span>Não</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guima-filter-group">
+                        <label class="guima-filter-label">Entrada gratuita</label>
+                        <div class="guima-radio-group full-width" id="entradaRadioGroup" role="radiogroup"
+                            aria-label="Entrada gratuita">
+                            <div class="guima-radio-option">
+                                <input type="radio" id="entradaTodos" name="entrada" value="" checked>
+                                <label for="entradaTodos" class="guima-radio-label">
+                                    <span class="guima-radio-indicator"></span>
+                                    <span>Todos</span>
+                                </label>
+                            </div>
+                            <div class="guima-radio-option">
+                                <input type="radio" id="entradaNao" name="entrada" value="Não">
+                                <label for="entradaNao" class="guima-radio-label">
+                                    <span class="guima-radio-indicator"></span>
+                                    <span>Sim</span>
+                                </label>
+                            </div>
+                            <div class="guima-radio-option">
+                                <input type="radio" id="entradaSim" name="entrada" value="Sim">
+                                <label for="entradaSim" class="guima-radio-label">
                                     <span class="guima-radio-indicator"></span>
                                     <span>Não</span>
                                 </label>
@@ -1346,7 +1474,8 @@ body.dark-mode .guima-nearby-museums {
                 </div>
             </div>
 
-            <div id="modal" class="guima-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div id="modal" class="guima-modal-overlay hidden" role="dialog" aria-modal="true"
+                aria-labelledby="modalTitle">
                 <div class="guima-modal" onclick="event.stopPropagation()">
                     <div class="guima-modal-header">
                         <h2 class="guima-modal-title" id="modalTitle" tabindex="-1"></h2>
@@ -1357,13 +1486,12 @@ body.dark-mode .guima-nearby-museums {
             </div>
         </div>
 
-        <a href="#filtersSection" class="back-to-top" tabindex="0">Voltar para seleção de filtros e busca de museus</a>
+        <a href="#filtersSection" class="back-to-top" tabindex="0">Voltar para filtros</a>
         <a href="#map" class="back-to-top" tabindex="0">Voltar para o mapa</a>
-        <a href="#main-nav" class="back-to-top" tabindex="0">Voltar ao menu de navegação do site</a>
+        <a href="#main-nav" class="back-to-top" tabindex="0">Voltar ao menu</a>
     </main>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
+    <div id="loadingOverlay" class="loading-overlay hidden" aria-live="polite" aria-busy="false">
         <div class="loading-spinner">
             <div class="spinner"></div>
             <p>Carregando museus...</p>
@@ -1371,12 +1499,53 @@ body.dark-mode .guima-nearby-museums {
     </div>
 
     <footer class="footer">
-        <p class="footer-text">Projeto em desenvolvimento por Ícaro Ferracini como trabalho de conclusão de curso para o MBA de Jornalismo de Dados - 2025</p>
+        <p class="footer-text">Projeto desenvolvido por Ícaro Ferracini - MBA Jornalismo de Dados 2025</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="https://unpkg.com/leaflet-gesture-handling@1.2.2/dist/leaflet-gesture-handling.min.js"></script>
     <script>
+        
+
+        // ========== FUNÇÕES DE ACESSIBILIDADE ==========
+
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('role', 'status');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.className = 'sr-only';
+            announcement.textContent = message;
+            document.body.appendChild(announcement);
+            setTimeout(() => announcement.remove(), 1000);
+        }
+
+        function trapFocus(element) {
+            const focusableElements = element.querySelectorAll(
+                'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+
+            element.addEventListener('keydown', function (e) {
+                if (e.key !== 'Tab') return;
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstFocusable) {
+                        lastFocusable.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastFocusable) {
+                        firstFocusable.focus();
+                        e.preventDefault();
+                    }
+                }
+            });
+        }
+
+        // ========== DARK MODE ==========
+
         const darkModeToggle = document.getElementById('darkModeToggle');
         const body = document.body;
 
@@ -1393,34 +1562,31 @@ body.dark-mode .guima-nearby-museums {
         }
 
         const savedMode = localStorage.getItem('darkMode');
-        
         if (savedMode === 'enabled') {
             enableDarkMode();
-        } else if (savedMode === 'disabled') {
-            disableDarkMode();
         }
 
         darkModeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
-            
+
             if (body.classList.contains('dark-mode')) {
                 localStorage.setItem('darkMode', 'enabled');
-                darkModeToggle.textContent = '☀️ Modo claro';
-                darkModeToggle.setAttribute('aria-label', 'Alternar para modo claro');
+                enableDarkMode();
                 if (state.map && state.lightTileLayer && state.darkTileLayer) {
                     state.map.removeLayer(state.lightTileLayer);
                     state.map.addLayer(state.darkTileLayer);
                 }
             } else {
                 localStorage.setItem('darkMode', 'disabled');
-                darkModeToggle.textContent = '🌙 Modo escuro';
-                darkModeToggle.setAttribute('aria-label', 'Alternar para modo escuro');
+                disableDarkMode();
                 if (state.map && state.lightTileLayer && state.darkTileLayer) {
                     state.map.removeLayer(state.darkTileLayer);
                     state.map.addLayer(state.lightTileLayer);
                 }
             }
         });
+
+        // ========== TAMANHO DE TEXTO ==========
 
         let currentFontSize = 100;
         const minFontSize = 75;
@@ -1437,6 +1603,7 @@ body.dark-mode .guima-nearby-museums {
                 currentFontSize += fontSizeStep;
                 document.documentElement.style.fontSize = currentFontSize + '%';
                 localStorage.setItem('fontSize', currentFontSize);
+                announceToScreenReader('Texto aumentado');
             }
         });
 
@@ -1445,15 +1612,20 @@ body.dark-mode .guima-nearby-museums {
                 currentFontSize -= fontSizeStep;
                 document.documentElement.style.fontSize = currentFontSize + '%';
                 localStorage.setItem('fontSize', currentFontSize);
+                announceToScreenReader('Texto diminuído');
             }
         });
 
+        // ========== ESTADO E DADOS ==========
+
         const ESTADO_MAP = {
-            'AC':'Acre','AL':'Alagoas','AP':'Amapá','AM':'Amazonas','BA':'Bahia','CE':'Ceará','DF':'Distrito Federal',
-            'ES':'Espírito Santo','GO':'Goiás','MA':'Maranhão','MT':'Mato Grosso','MS':'Mato Grosso do Sul',
-            'MG':'Minas Gerais','PA':'Pará','PB':'Paraíba','PR':'Paraná','PE':'Pernambuco','PI':'Piauí',
-            'RJ':'Rio de Janeiro','RN':'Rio Grande do Norte','RS':'Rio Grande do Sul','RO':'Rondônia','RR':'Roraima',
-            'SC':'Santa Catarina','SP':'São Paulo','SE':'Sergipe','TO':'Tocantins'
+            'AC': 'Acre', 'AL': 'Alagoas', 'AP': 'Amapá', 'AM': 'Amazonas', 'BA': 'Bahia',
+            'CE': 'Ceará', 'DF': 'Distrito Federal', 'ES': 'Espírito Santo', 'GO': 'Goiás',
+            'MA': 'Maranhão', 'MT': 'Mato Grosso', 'MS': 'Mato Grosso do Sul', 'MG': 'Minas Gerais',
+            'PA': 'Pará', 'PB': 'Paraíba', 'PR': 'Paraná', 'PE': 'Pernambuco', 'PI': 'Piauí',
+            'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte', 'RS': 'Rio Grande do Sul',
+            'RO': 'Rondônia', 'RR': 'Roraima', 'SC': 'Santa Catarina', 'SP': 'São Paulo',
+            'SE': 'Sergipe', 'TO': 'Tocantins'
         };
 
         function getEstadoCompleto(siglaOrName) {
@@ -1471,6 +1643,7 @@ body.dark-mode .guima-nearby-museums {
             selectedRecursos: [],
             selectedEstados: [],
             selectedVisitaGuia: '',
+            selectedEntrada: '',
             filterOptions: {
                 tematicas: [],
                 statusFuncionamento: [],
@@ -1482,72 +1655,93 @@ body.dark-mode .guima-nearby-museums {
             markersLayer: null,
             lightTileLayer: null,
             darkTileLayer: null
+
         };
+        let lastFocusedLayer = null;
+        let lastFocusedElement = null;
+
+        // ========== LOADING ==========
 
         function showLoading() {
-    const overlay = document.getElementById('loadingOverlay');
-    overlay.style.display = 'flex';
-    overlay.setAttribute('aria-live', 'polite');
-}
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.remove('hidden');
+            overlay.style.display = 'flex';
+            overlay.setAttribute('aria-busy', 'true');
+            announceToScreenReader('Carregando museus, por favor aguarde');
+        }
 
-function hideLoading() {
-    const overlay = document.getElementById('loadingOverlay');
-    overlay.style.display = 'none';
-}
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('hidden');
+            overlay.style.display = 'none';
+            overlay.setAttribute('aria-busy', 'false');
+        }
+
+        // ========== CARREGAR DADOS ==========
 
         async function loadCSVData() {
-    showLoading();
-    
-    try {
-        const response = await fetch('DadosMuseus.csv');
-        
-        if (!response.ok) {
-            throw new Error(`Erro ao carregar CSV: ${response.status}`);
-        }
-        
-        const csvText = await response.text();
-        
-        const results = Papa.parse(csvText, {
-            header: true,
-            skipEmptyLines: true,
-            dynamicTyping: false,
-            transformHeader: (header) => header.trim()
-        });
-        
-        if (results.errors.length > 0) {
-            console.error('Erros no CSV:', results.errors);
-        }
-        
-        state.museums = results.data.map(processMuseum).filter(Boolean);
-        
-        console.log('Museus carregados:', state.museums.length);
-        
-        if (state.museums.length === 0) {
-            throw new Error('Nenhum museu válido encontrado no CSV');
-        }
-        
-        populateSelects();
-        updateFilters();
-        
-    } catch (error) {
-        console.error('Erro ao carregar CSV:', error);
-        alert('Erro ao carregar dados dos museus. Verifique se o arquivo DadosMuseus.csv está na mesma pasta do HTML e se você está usando um servidor local.');
-        
-        loadSampleData();
-    } finally {
-        hideLoading();
-    }
-}
+            showLoading();
 
-        
+            try {
+                const response = await fetch('DadosMuseus.csv');
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar CSV: ${response.status}`);
+                }
+
+                const csvText = await response.text();
+
+                const results = Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    dynamicTyping: false,
+                    transformHeader: (header) => header.trim()
+                });
+
+                if (results.errors.length > 0) {
+                    console.error('Erros no CSV:', results.errors);
+                }
+
+                state.museums = results.data.map(processMuseum).filter(Boolean);
+
+                console.log('Museus carregados:', state.museums.length);
+
+                if (state.museums.length === 0) {
+                    throw new Error('Nenhum museu válido encontrado no CSV');
+                }
+
+                populateSelects();
+                updateFilters();
+                announceToScreenReader(`${state.museums.length} museus carregados com sucesso`);
+
+            } catch (error) {
+                console.error('Erro ao carregar CSV:', error);
+
+                const errorMessage = document.createElement('div');
+                errorMessage.setAttribute('role', 'alert');
+                errorMessage.setAttribute('aria-live', 'assertive');
+                errorMessage.className = 'error-message';
+                errorMessage.innerHTML = `
+                    <h2>Erro ao carregar dados</h2>
+                    <p>Não foi possível carregar os dados dos museus. 
+                       Verifique se o arquivo DadosMuseus.csv está disponível.</p>
+                    <button onclick="location.reload()">Recarregar página</button>
+                `;
+                document.body.insertBefore(errorMessage, document.body.firstChild);
+
+                announceToScreenReader('Erro ao carregar dados dos museus');
+            } finally {
+                hideLoading();
+            }
+        }
 
         function processMuseum(row) {
             const coords = row['Localização']?.split(',').map(c => parseFloat(c.trim()));
-            
+
             if (!coords || coords.length !== 2 || coords.some(isNaN)) {
                 return null;
             }
-            
+
             const extractResources = (value) => {
                 if (!value || value === 'Não informado' || value === 'Não possui') return [];
                 return value.split(',').map(item => item.trim()).filter(item => item);
@@ -1562,7 +1756,6 @@ function hideLoading() {
                 esfera: row['Esfera'],
                 esferaDetalhe: row['Esfera Detalhe'],
                 statusFuncionamento: row['Status de Funcionamento'],
-                anoAbertura: row['Ano de abertura'],
                 statusAcessibilidade: row['Status de Acessibilidade'],
                 recursosLocomocao: extractResources(row['Dificuldade locomoção']),
                 recursosVisualAuditiva: extractResources(row['Deficiencia Visual e Auditiva']),
@@ -1577,7 +1770,6 @@ function hideLoading() {
                 cep: row['CEP'],
                 localizacao: { lat: coords[0], lng: coords[1] },
                 localizacaoManual: row['LocalizaçãoManual'],
-                enderecoCompleto: row['EnderecoCompleto'],
                 horarios: row['Dias e horários de abertura para o público'],
                 entradaCobrada: row['A entrada ao museu é cobrada?'],
                 valorEntrada: row['Valor da entrada'],
@@ -1588,11 +1780,12 @@ function hideLoading() {
                 siteOficial: row['Site Oficial'],
                 facebook: row['Facebook'],
                 instagram: row['Instagram'],
-                youtube: row['Youtube'],
-                tiktok: row['TikTok'],
-                spotify: row['Spotify']
+                youtube: row['Youtube']
             };
         }
+
+        // ========== FILTROS (mesmo código do seu sistema) ==========
+        // [Mantenho todo o código de filtros existente...]
 
         function populateSelects() {
             const sets = {
@@ -1650,46 +1843,51 @@ function hideLoading() {
                     updateMap();
                 });
             });
+
+            document.querySelectorAll('input[name="entrada"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    state.selectedEntrada = e.target.value;
+                    updateMap();
+                });
+            });
         }
 
         function createMultiSelect(name, options, selected) {
             const container = document.getElementById(`${name}Options`);
             const search = document.getElementById(`${name}Search`);
-            
+
             const searchValue = search ? search.value.toLowerCase() : '';
-            const filteredOptions = options.filter(opt => 
-                opt.toLowerCase().includes(searchValue)
-            );
+            const filteredOptions = options.filter(opt => opt.toLowerCase().includes(searchValue));
 
             container.innerHTML = '';
             filteredOptions.forEach((option, index) => {
                 const isSelected = selected.includes(option);
                 const uniqueId = `${name}-option-${index}`;
-                
+
                 const label = document.createElement('label');
                 label.className = 'guima-dropdown-item';
                 label.setAttribute('role', 'option');
                 label.setAttribute('aria-selected', isSelected ? 'true' : 'false');
                 label.htmlFor = uniqueId;
-                
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'guima-dropdown-checkbox';
                 checkbox.id = uniqueId;
                 checkbox.checked = isSelected;
                 checkbox.value = option;
-                
-checkbox.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-});
+
+                checkbox.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        checkbox.checked = !checkbox.checked;
+                        checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
 
                 checkbox.addEventListener('change', (e) => {
                     e.stopPropagation();
-                    
+
                     if (e.target.checked) {
                         if (!selected.includes(option)) {
                             selected.push(option);
@@ -1700,18 +1898,19 @@ checkbox.addEventListener('keydown', (e) => {
                             selected.splice(idx, 1);
                         }
                     }
-                    
+
                     updateButtonTags(name, selected, getRemoveCallback(name, selected));
                     label.setAttribute('aria-selected', e.target.checked ? 'true' : 'false');
+                    announceToScreenReader(`${option} ${e.target.checked ? 'adicionado' : 'removido'}`);
                     updateMap();
                 });
-                
+
                 const checkboxVisual = document.createElement('div');
                 checkboxVisual.className = 'guima-checkbox-visual';
-                
+
                 const text = document.createElement('span');
                 text.textContent = option;
-                
+
                 label.appendChild(checkbox);
                 label.appendChild(checkboxVisual);
                 label.appendChild(text);
@@ -1724,26 +1923,22 @@ checkbox.addEventListener('keydown', (e) => {
                 'tematica': (item) => {
                     state.selectedTematicas = state.selectedTematicas.filter(t => t !== item);
                     updateButtonTags('tematica', state.selectedTematicas, getRemoveCallback('tematica', state.selectedTematicas));
-                    const options = state.filterOptions.tematicas;
-                    createMultiSelect('tematica', options, state.selectedTematicas);
+                    createMultiSelect('tematica', state.filterOptions.tematicas, state.selectedTematicas);
                 },
                 'acessibilidade': (item) => {
                     state.selectedAcessibilidade = state.selectedAcessibilidade.filter(a => a !== item);
                     updateButtonTags('acessibilidade', state.selectedAcessibilidade, getRemoveCallback('acessibilidade', state.selectedAcessibilidade));
-                    const options = state.filterOptions.statusAcessibilidade;
-                    createMultiSelect('acessibilidade', options, state.selectedAcessibilidade);
+                    createMultiSelect('acessibilidade', state.filterOptions.statusAcessibilidade, state.selectedAcessibilidade);
                 },
                 'recursos': (item) => {
                     state.selectedRecursos = state.selectedRecursos.filter(r => r !== item);
                     updateButtonTags('recursos', state.selectedRecursos, getRemoveCallback('recursos', state.selectedRecursos));
-                    const options = state.filterOptions.recursos;
-                    createMultiSelect('recursos', options, state.selectedRecursos);
+                    createMultiSelect('recursos', state.filterOptions.recursos, state.selectedRecursos);
                 },
                 'estados': (item) => {
                     state.selectedEstados = state.selectedEstados.filter(e => e !== item);
                     updateButtonTags('estados', state.selectedEstados, getRemoveCallback('estados', state.selectedEstados));
-                    const options = state.filterOptions.estados;
-                    createMultiSelect('estados', options, state.selectedEstados);
+                    createMultiSelect('estados', state.filterOptions.estados, state.selectedEstados);
                 }
             };
             return callbacks[name];
@@ -1752,7 +1947,7 @@ checkbox.addEventListener('keydown', (e) => {
         function updateButtonTags(name, items, removeCallback) {
             const button = document.getElementById(`${name}Button`);
             button.innerHTML = '';
-            
+
             if (items.length === 0) {
                 const placeholder = document.createElement('span');
                 placeholder.className = 'guima-select-button-placeholder';
@@ -1768,6 +1963,7 @@ checkbox.addEventListener('keydown', (e) => {
                     tag.onclick = (e) => {
                         e.stopPropagation();
                         removeCallback(item);
+                        announceToScreenReader(`${item} removido`);
                         updateMap();
                     };
                     button.appendChild(tag);
@@ -1778,14 +1974,17 @@ checkbox.addEventListener('keydown', (e) => {
         function updateTags(name, items, removeCallback) {
             const container = document.getElementById(`${name}Tags`);
             container.innerHTML = '';
-            
+
             items.forEach(item => {
                 const tag = document.createElement('button');
                 tag.className = 'guima-tag';
                 tag.type = 'button';
                 tag.setAttribute('aria-label', `Remover ${typeof item === 'object' ? item.titulo : item}`);
                 tag.innerHTML = `<span class="guima-tag-text">${typeof item === 'object' ? item.titulo : item}</span><span class="guima-tag-remove">×</span>`;
-                tag.onclick = () => removeCallback(item);
+                tag.onclick = () => {
+                    removeCallback(item);
+                    announceToScreenReader(`${item.titulo || item} removido`);
+                };
                 container.appendChild(tag);
             });
         }
@@ -1827,16 +2026,28 @@ checkbox.addEventListener('keydown', (e) => {
 
             if (state.selectedVisitaGuia) {
                 if (state.selectedVisitaGuia === 'Sim') {
-                    filtered = filtered.filter(m => 
-                        m.visitaGuiaOriginal === 'Sim, mediante agendamento' || 
+                    filtered = filtered.filter(m =>
+                        m.visitaGuiaOriginal === 'Sim, mediante agendamento' ||
                         m.visitaGuiaOriginal === 'Sim, sem necessidade de agendamento' ||
                         m.visitaGuiaOriginal === 'Sim, SOMENTE mediante agendamento'
                     );
                 } else if (state.selectedVisitaGuia === 'Não') {
-                    filtered = filtered.filter(m => 
-                        m.visitaGuiaOriginal !== 'Sim, mediante agendamento' && 
+                    filtered = filtered.filter(m =>
+                        m.visitaGuiaOriginal !== 'Sim, mediante agendamento' &&
                         m.visitaGuiaOriginal !== 'Sim, sem necessidade de agendamento' &&
                         m.visitaGuiaOriginal !== 'Sim, SOMENTE mediante agendamento'
+                    );
+                }
+            }
+
+            if (state.selectedEntrada) {
+                if (state.selectedEntrada === 'Sim') {
+                    filtered = filtered.filter(m => m.entradaCobrada === 'Sim');
+                } else if (state.selectedEntrada === 'Não') {
+                    filtered = filtered.filter(m =>
+                        m.entradaCobrada !== 'Sim' &&
+                        m.entradaCobrada !== 'Não informado' &&
+                        m.entradaCobrada !== 'Não disponível'
                     );
                 }
             }
@@ -1844,100 +2055,101 @@ checkbox.addEventListener('keydown', (e) => {
             return filtered;
         }
 
-        function updateMap() {
-    const filtered = getFilteredMuseums();
+        // ========== MAPA COM OTIMIZAÇÕES ==========
 
-    const isInitialLoad = state.markersLayer && state.markersLayer.getLayers().length === 0;
-if (filtered.length > 25 || isInitialLoad) {
-    showLoading();
-}
-
-    // ✅ Atualiza o contador IMEDIATAMENTE (FORA do setTimeout)
-    document.getElementById('museumCounter').textContent =
-        `Mostrando ${filtered.length} de ${state.museums.length} museus`;
-
-    setTimeout(() => {
-        if (state.markersLayer) {
-            state.markersLayer.clearLayers();
+        function getAccessibilityIcon(status) {
+            const icons = {
+                'Acessível': { iconClass: 'marker-acessivel', iconSymbol: '✓' },
+                'Parcialmente Acessível': { iconClass: 'marker-parcial', iconSymbol: '!' },
+                'Sem Recursos': { iconClass: 'marker-sem-recursos', iconSymbol: '✕' },
+                'default': { iconClass: 'marker-info-insuficiente', iconSymbol: '?' }
+            };
+            return icons[status] || icons['default'];
         }
 
-        filtered.forEach(museum => {
-            let iconClass = 'marker-info-insuficiente';
-            let iconSymbol = '?';
+        function updateMap() {
+            const filtered = getFilteredMuseums();
 
-            switch (museum.statusAcessibilidade) {
-                case 'Acessível':
-                    iconClass = 'marker-acessivel';
-                    iconSymbol = '✓';
-                    break;
-                case 'Parcialmente Acessível':
-                    iconClass = 'marker-parcial';
-                    iconSymbol = '!';
-                    break;
-                case 'Sem Recursos':
-                    iconClass = 'marker-sem-recursos';
-                    iconSymbol = '✕';
-                    break;
-                case 'Informação Insuficiente':
-                default:
-                    iconClass = 'marker-info-insuficiente';
-                    iconSymbol = '?';
-                    break;
-            }
+            document.getElementById('museumCounter').textContent =
+                `Mostrando ${filtered.length} de ${state.museums.length} museus`;
 
-            const customIcon = L.divIcon({
-                className: 'custom-div-icon',
-                html: `<div class="custom-marker ${iconClass}">
-                        <div class="custom-marker-inner">${iconSymbol}</div>
-                       </div>`,
-                iconSize: [44, 44],
-                iconAnchor: [22, 44],
-                popupAnchor: [0, -44]
-            });
-
-            const marker = L.marker([museum.localizacao.lat, museum.localizacao.lng], {
-                icon: customIcon
-            }).on('click', () => showModal(museum, filtered));
-
-            marker.addTo(state.markersLayer);
+            const shouldShowLoading = filtered.length > 50;
+            if (shouldShowLoading) showLoading();
 
             setTimeout(() => {
-                const markerElement = marker.getElement();
-                if (markerElement) {
-                    const markerId = `marker-${museum.id}`;
-                    markerElement.setAttribute('id', markerId);
-                    markerElement.setAttribute('role', 'button');
-                    markerElement.setAttribute('tabindex', '0');
-                    markerElement.setAttribute('aria-label',
-                        `${museum.titulo}, ${museum.municipio}, ${museum.estado}. Nível de acessibilidade: ${museum.statusAcessibilidade}`
+                state.markersLayer.clearLayers();
+
+                const markers = filtered.map(museum => {
+                    const { iconClass, iconSymbol } = getAccessibilityIcon(museum.statusAcessibilidade);
+
+                    const customIcon = L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `<div class="custom-marker ${iconClass}">
+                                <div class="custom-marker-inner">${iconSymbol}</div>
+                               </div>`,
+                        iconSize: [44, 44],
+                        iconAnchor: [22, 44],
+                        popupAnchor: [0, -44]
+                    });
+
+                    const marker = L.marker(
+                        [museum.localizacao.lat, museum.localizacao.lng],
+                        { icon: customIcon }
                     );
 
-                    markerElement.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            showModal(museum, filtered);
+                    // ✅ ARMAZENA dados do museu no marcador para usar no cluster
+                    marker.museumData = {
+                        municipio: museum.municipio,
+                        estado: museum.estado,
+                        titulo: museum.titulo,
+                        estadoComp: museum.estadoCompleto
+                    };
+
+                    marker.on('click', function () {
+  lastFocusedLayer = marker;        // guarda o layer (marker)
+  showModal(museum, filtered);
+});
+
+
+                    marker.on('add', function () {
+                        const markerElement = this.getElement();
+                        if (markerElement) {
+                            markerElement.setAttribute('role', 'button');
+                            markerElement.setAttribute('tabindex', '0');
+                            markerElement.setAttribute('aria-label',
+                                `${museum.titulo}, ${museum.municipio}, ${museum.estado}. ` +
+                                `Nível de acessibilidade: ${museum.statusAcessibilidade || 'Não informado'}`
+                            );
+
+                            markerElement.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    lastFocusedLayer = marker;      // garante que salvamos o layer também no teclado
+    showModal(museum, filtered);
+  }
+});
                         }
                     });
+
+                    return marker;
+                });
+
+                state.markersLayer.addLayers(markers);
+
+                announceToScreenReader(`${filtered.length} museus encontrados no mapa`);
+
+                if (filtered.length > 0) {
+                    const bounds = L.latLngBounds(
+                        filtered.map(m => [m.localizacao.lat, m.localizacao.lng])
+                    );
+                    state.map.fitBounds(bounds, { padding: [50, 50], maxZoom: 12 });
+                } else {
+                    state.map.setView([-14.235, -51.925], 4);
                 }
-            }, 0);
-        });
 
-        if (filtered.length > 0) {
-            const bounds = L.latLngBounds(filtered.map(m => [m.localizacao.lat, m.localizacao.lng]));
-            state.map.fitBounds(bounds, { padding: [50, 50], maxZoom: 12 });
-        } else {
-            state.map.setView([-14.235, -51.925], 4);
+                if (shouldShowLoading) hideLoading();
+            }, shouldShowLoading ? 50 : 0);
         }
-
-        // Aguarda renderização completa dos marcadores
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                hideLoading();
-            });
-        });
-        
-    }, filtered.length > 25 || isInitialLoad ? 100 : 0);
-}
 
         function updateFilters() {
             updateTags('selectedMuseums', state.selectedMuseums, (item) => {
@@ -1958,397 +2170,438 @@ if (filtered.length > 25 || isInitialLoad) {
             updateMap();
         }
 
-        function trapFocus(element) {
-            const focusableElements = element.querySelectorAll(
-                'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-            );
-            const firstFocusable = focusableElements[0];
-            const lastFocusable = focusableElements[focusableElements.length - 1];
+        // ========== MODAL COMPLETO (todas as informações) ==========
 
-            element.addEventListener('keydown', function(e) {
-                if (e.key !== 'Tab') return;
+        function showModal(museum, filteredMuseums = null) {
+            const currentFilteredMuseums = filteredMuseums || getFilteredMuseums();
 
-                if (e.shiftKey) {
-                    if (document.activeElement === firstFocusable) {
-                        lastFocusable.focus();
-                        e.preventDefault();
-                    }
-                } else {
-                    if (document.activeElement === lastFocusable) {
-                        firstFocusable.focus();
-                        e.preventDefault();
-                    }
+            let headerClass = 'header-info-insuficiente';
+            let nivelTexto = 'Informação Insuficiente';
+
+            switch (museum.statusAcessibilidade) {
+                case 'Acessível':
+                    headerClass = 'header-acessivel';
+                    nivelTexto = 'Acessível';
+                    break;
+                case 'Parcialmente Acessível':
+                    headerClass = 'header-parcial';
+                    nivelTexto = 'Parcialmente Acessível';
+                    break;
+                case 'Sem Recursos':
+                    headerClass = 'header-sem-recursos';
+                    nivelTexto = 'Sem Recursos';
+                    break;
+                case 'Informação Insuficiente':
+                default:
+                    headerClass = 'header-info-insuficiente';
+                    nivelTexto = 'Informação Insuficiente';
+                    break;
+            }
+
+            const modalHeader = document.querySelector('.guima-modal-header');
+            modalHeader.className = `guima-modal-header ${headerClass}`;
+            modalHeader.innerHTML = `
+                <p class="guima-modal-accessibility-text" role="status" aria-live="polite">
+                    <span class="sr-only">Nível de Acessibilidade do museu: </span>${nivelTexto}
+                </p>
+                <button class="guima-modal-close" id="modalClose" aria-label="Fechar detalhes do museu e voltar ao mapa">
+                    <span aria-hidden="true">×</span>
+                    <span>fechar</span>
+                </button>
+            `;
+
+            document.getElementById('modalClose').onclick = closeModal;
+
+            let content = '';
+
+            content += `<h2 class="guima-modal-title" id="modal-museum-title">${museum.titulo}</h2>`;
+
+            content += `<div class="guima-modal-info-grid" role="list" aria-label="Informações básicas do museu">`;
+
+            if (museum.statusFuncionamento) {
+                let badgeClass = '';
+                if (museum.statusFuncionamento.toLowerCase() === 'ativo') {
+                    badgeClass = 'ativo';
+                } else if (museum.statusFuncionamento.toLowerCase() === 'inativo') {
+                    badgeClass = 'inativo';
                 }
+
+                content += `<div class="guima-modal-info-item" role="listitem">
+                    <span class="guima-modal-info-label" id="status-label-${museum.id}">Status de Funcionamento</span>
+                    <span class="guima-modal-info-value" aria-labelledby="status-label-${museum.id}">
+                        ${badgeClass ? `<span class="guima-status-badge ${badgeClass}">${museum.statusFuncionamento}</span>` : museum.statusFuncionamento}
+                    </span>
+                </div>`;
+            }
+
+            if (museum.esfera) {
+                content += `<div class="guima-modal-info-item" role="listitem">
+                    <span class="guima-modal-info-label" id="esfera-label-${museum.id}">Esfera</span>
+                    <span class="guima-modal-info-value" aria-labelledby="esfera-label-${museum.id}">${museum.esfera}${museum.esferaDetalhe ? ` - ${museum.esferaDetalhe}` : ''}</span>
+                </div>`;
+            }
+
+            content += `</div>`;
+
+            if (museum.tematica && museum.tematica !== 'Não informado') {
+                content += `<div class="guima-modal-info-item" role="listitem">
+                    <span class="guima-modal-info-label" id="tematica-label-${museum.id}">Temática</span>
+                    <span class="guima-modal-info-value" aria-labelledby="tematica-label-${museum.id}">${museum.tematica}</span>
+                </div>`;
+            }
+
+            if (museum.descricao) {
+                content += `<div class="guima-modal-section">
+                    <h3 class="guima-modal-section-title">Descrição</h3>
+                    <p class="guima-modal-text">${museum.descricao}</p>
+                </div>`;
+            }
+
+            if (museum.logradouro || museum.municipio) {
+                content += `<div class="guima-modal-section">
+                    <h3 class="guima-modal-section-title">Endereço</h3>`;
+
+                if (museum.localizacaoManual && museum.localizacaoManual === 'True') {
+                    content += `<div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 0.25rem;">
+                        <p style="margin: 0; color: #856404; font-size: 0.875rem; font-weight: 600;">
+                            Endereço completo indisponível no site MuseusBR. <br/>A informação apresentada pode ser imprecisa.
+                        </p>
+                    </div>`;
+                }
+
+                if (museum.logradouro) content += `<address style="font-style: normal;"><p class="guima-modal-text">${museum.logradouro}${museum.numero ? `, ${museum.numero}` : ''}${museum.complemento ? ` - ${museum.complemento}` : ''}</p>`;
+                if (museum.municipio) content += `<p class="guima-modal-text">${museum.bairro ? `${museum.bairro} - ` : ''}${museum.municipio}${museum.estadoCompleto ? `, ${museum.estadoCompleto}` : ''}</p>`;
+                if (museum.cep) content += `<p class="guima-modal-text">CEP: ${museum.cep}</p>`;
+                content += `</address></div>`;
+            }
+
+            if (museum.recursosLocomocao.length > 0 || museum.recursosVisualAuditiva.length > 0 || museum.recursosEstrangeira.length > 0) {
+                content += `<div class="guima-modal-section">
+                    <h3 class="guima-modal-section-title">Recursos de Acessibilidade</h3>`;
+
+                if (museum.recursosLocomocao.length > 0) {
+                    content += `<div style="margin-bottom: 0.75rem;">
+                        <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Dificuldade de locomoção</h4>
+                        <ul class="guima-modal-list">`;
+                    museum.recursosLocomocao.forEach(r => content += `<li>${r}</li>`);
+                    content += `</ul></div>`;
+                }
+
+                if (museum.recursosVisualAuditiva.length > 0) {
+                    content += `<div style="margin-bottom: 0.75rem;">
+                        <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Deficiência Visual e Auditiva</h4>
+                        <ul class="guima-modal-list">`;
+                    museum.recursosVisualAuditiva.forEach(r => content += `<li>${r}</li>`);
+                    content += `</ul></div>`;
+                }
+
+                if (museum.recursosEstrangeira.length > 0) {
+                    content += `<div style="margin-bottom: 0.75rem;">
+                        <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Pessoa Estrangeira</h4>
+                        <ul class="guima-modal-list">`;
+                    museum.recursosEstrangeira.forEach(r => content += `<li>${r}</li>`);
+                    content += `</ul></div>`;
+                }
+                content += `</div>`;
+            }
+
+            if (museum.visitaGuiaOriginal || museum.atividadesEducativas) {
+                content += `<div class="guima-modal-section">
+                    <h3 class="guima-modal-section-title">Recursos para visita e atividades</h3>`;
+
+                if (museum.visitaGuiaOriginal && museum.visitaGuiaOriginal !== 'Não informado') {
+                    content += `<div class="guima-modal-info-item" style="margin-bottom: 0.75rem;">
+                        <span class="guima-modal-info-label" id="visita-label-${museum.id}">Visita com guia</span>
+                        <span class="guima-modal-info-value" aria-labelledby="visita-label-${museum.id}">${museum.visitaGuiaOriginal}</span>
+                    </div>`;
+                }
+
+                if (museum.atividadesEducativas && museum.atividadesEducativas !== 'Não informado') {
+                    content += `<div class="guima-modal-info-item">
+                        <span class="guima-modal-info-label" id="atividades-label-${museum.id}">Atividades educativas</span>
+                        <span class="guima-modal-info-value" aria-labelledby="atividades-label-${museum.id}">${museum.atividadesEducativas}</span>
+                    </div>`;
+                }
+                content += `</div>`;
+            }
+
+            if (museum.horarios || museum.entradaCobrada) {
+                content += `<div class="guima-modal-section">
+                    <h3 class="guima-modal-section-title">Informações de visitação</h3>`;
+
+                if (museum.horarios) {
+                    content += `<div class="guima-modal-info-item" style="margin-bottom: 0.75rem;">
+                        <span class="guima-modal-info-label" id="horarios-label-${museum.id}">Horários</span>
+                        <span class="guima-modal-info-value" aria-labelledby="horarios-label-${museum.id}">${museum.horarios}</span>
+                    </div>`;
+                }
+
+                if (museum.entradaCobrada) {
+                    content += `<div class="guima-modal-info-item" style="margin-bottom: 0.75rem;">
+                        <span class="guima-modal-info-label" id="entrada-label-${museum.id}">Entrada cobrada</span>
+                        <span class="guima-modal-info-value" aria-labelledby="entrada-label-${museum.id}">${museum.entradaCobrada}</span>
+                    </div>`;
+                }
+
+                if (museum.valorEntrada) {
+                    content += `<div class="guima-modal-info-item" style="margin-bottom: 0.75rem;">
+                        <span class="guima-modal-info-label" id="valor-label-${museum.id}">Valor</span>
+                        <span class="guima-modal-info-value" aria-labelledby="valor-label-${museum.id}">${museum.valorEntrada}</span>
+                    </div>`;
+                }
+
+                if (museum.obsEntrada) {
+                    content += `<div class="guima-modal-info-item">
+                        <span class="guima-modal-info-label" id="obs-label-${museum.id}">Observações</span>
+                        <span class="guima-modal-info-value" aria-labelledby="obs-label-${museum.id}">${museum.obsEntrada}</span>
+                    </div>`;
+                }
+                content += `</div>`;
+            }
+
+            if (museum.linkMuseusBR || museum.siteOficial || museum.facebook || museum.instagram || museum.youtube) {
+                content += `<div class="guima-modal-section">
+                    <h3 class="guima-modal-section-title">Site e redes sociais</h3>
+                    <ul class="guima-modal-list" aria-label="Links para site e redes sociais do museu">`;
+
+                if (museum.linkMuseusBR) content += `<li><a href="${museum.linkMuseusBR}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">Página no MuseusBR<span class="sr-only"> (abre em nova aba)</span></a></li>`;
+                if (museum.siteOficial) content += `<li><a href="${museum.siteOficial}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">Site Oficial<span class="sr-only"> (abre em nova aba)</span></a></li>`;
+                if (museum.facebook) content += `<li><a href="${museum.facebook}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">Facebook<span class="sr-only"> (abre em nova aba)</span></a></li>`;
+                if (museum.instagram) content += `<li><a href="${museum.instagram}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">Instagram<span class="sr-only"> (abre em nova aba)</span></a></li>`;
+                if (museum.youtube) content += `<li><a href="${museum.youtube}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">YouTube<span class="sr-only"> (abre em nova aba)</span></a></li>`;
+
+                content += `</ul></div>`;
+            }
+
+            // Cards de museus próximos
+            if (currentFilteredMuseums.length > 1) {
+                const nearbyMuseums = getNearbyMuseums(museum, currentFilteredMuseums, 6);
+
+                if (nearbyMuseums.length > 0) {
+                    content += `
+                        <div class="guima-nearby-museums">
+                            <h3 class="guima-nearby-title">Outros museus disponíveis nos filtros atuais</h3>
+                            <div class="guima-nearby-grid">
+                    `;
+
+                    nearbyMuseums.forEach(nearby => {
+                        const badgeClass = getAccessibilityBadgeClass(nearby.statusAcessibilidade);
+                        const badgeSymbol = getAccessibilitySymbol(nearby.statusAcessibilidade);
+                        const distanceKm = nearby.distance.toFixed(1);
+
+                        content += `
+                            <button class="guima-nearby-card" 
+                                    data-museum-id="${nearby.id}"
+                                    aria-label="Ver detalhes de ${nearby.titulo}, distância aproximada de ${distanceKm} quilômetros">
+                                <div class="guima-nearby-card-name">${nearby.titulo}</div>
+                                <span class="guima-nearby-card-badge ${badgeClass}">
+                                    ${badgeSymbol} ${nearby.statusAcessibilidade || 'Não informado'}
+                                </span>
+                                <div class="guima-nearby-card-distance">Distância aproximada: ${distanceKm} km</div>
+                            </button>
+                        `;
+                    });
+
+                    content += `
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            content += `<button class="guima-modal-button" onclick="closeModal()">Fechar e voltar ao mapa</button>`;
+
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modal').setAttribute('aria-labelledby', 'modal-museum-title');
+
+            const modalElement = document.getElementById('modal');
+            modalElement.classList.remove('hidden');
+
+            // Scroll para o topo do modal
+            const modalContainer = document.querySelector('.guima-modal');
+            if (modalContainer) {
+                modalContainer.scrollTop = 0;
+            }
+
+            // ✅ MELHORIAS DE ACESSIBILIDADE
+            document.body.style.overflow = 'hidden';
+            const previousFocus = document.activeElement;
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    const closeButton = document.getElementById('modalClose');
+                    if (closeButton) {
+                        closeButton.focus();
+                    }
+
+                    trapFocus(document.querySelector('.guima-modal'));
+                    modalElement.dataset.previousFocus = previousFocus?.id || '';
+
+                    // Anuncia abertura
+                    announceToScreenReader(`Modal aberto: ${museum.titulo}`);
+
+                    // Configura eventos nos cards de museus próximos
+                    if (currentFilteredMuseums.length > 1) {
+                        setupNearbyCardsEvents(currentFilteredMuseums);
+                    }
+                });
             });
         }
 
-        function showModal(museum, filteredMuseums = null) {
-    // Se não foram passados museus filtrados, usa os do filtro atual
-    const currentFilteredMuseums = filteredMuseums || getFilteredMuseums();
-    
-    let headerClass = 'header-info-insuficiente';
-    let nivelTexto = 'Informação Insuficiente';
-    
-    switch(museum.statusAcessibilidade) {
-        case 'Acessível':
-            headerClass = 'header-acessivel';
-            nivelTexto = 'Acessível';
-            break;
-        case 'Parcialmente Acessível':
-            headerClass = 'header-parcial';
-            nivelTexto = 'Parcialmente Acessível';
-            break;
-        case 'Sem Recursos':
-            headerClass = 'header-sem-recursos';
-            nivelTexto = 'Sem Recursos';
-            break;
-        case 'Informação Insuficiente':
-        default:
-            headerClass = 'header-info-insuficiente';
-            nivelTexto = 'Informação Insuficiente';
-            break;
-    }
-    
-    const modalHeader = document.querySelector('.guima-modal-header');
-    modalHeader.className = `guima-modal-header ${headerClass}`;
-    modalHeader.innerHTML = `
-        <p class="guima-modal-accessibility-text" role="status" aria-live="polite">
-            <span class="sr-only">Nível de Acessibilidade do museu: </span>${nivelTexto}
-        </p>
-        <button class="guima-modal-close" id="modalClose" aria-label="Fechar detalhes do museu e voltar ao mapa">
-            <span aria-hidden="true">×</span>
-            <span>fechar</span>
-        </button>
-    `;
-    
-    document.getElementById('modalClose').onclick = closeModal;
-    
-    let content = '';
-    
-    content += `<h2 class="guima-modal-title" id="modal-museum-title">${museum.titulo}</h2>`;
-    
-    content += `<div class="guima-modal-info-grid" role="list" aria-label="Informações básicas do museu">`;
+        function getNearbyMuseums(currentMuseum, allMuseums, limit) {
+            const others = allMuseums.filter(m => m.id !== currentMuseum.id);
 
-    if (museum.statusFuncionamento) {
-        let badgeClass = '';
-        if (museum.statusFuncionamento.toLowerCase() === 'ativo') {
-            badgeClass = 'ativo';
-        } else if (museum.statusFuncionamento.toLowerCase() === 'inativo') {
-            badgeClass = 'inativo';
+            const withDistance = others.map(m => ({
+                ...m,
+                distance: calculateDistance(
+                    currentMuseum.localizacao.lat,
+                    currentMuseum.localizacao.lng,
+                    m.localizacao.lat,
+                    m.localizacao.lng
+                )
+            }));
+
+            return withDistance
+                .sort((a, b) => a.distance - b.distance)
+                .slice(0, limit);
         }
-        
-        content += `<div class="guima-modal-info-item" role="listitem">
-            <span class="guima-modal-info-label" id="status-label-${museum.id}">Status de Funcionamento</span>
-            <span class="guima-modal-info-value" aria-labelledby="status-label-${museum.id}">
-                ${badgeClass ? `<span class="guima-status-badge ${badgeClass}">${museum.statusFuncionamento}</span>` : museum.statusFuncionamento}
-            </span>
-        </div>`;
-    }
 
-    if (museum.esfera) {
-        content += `<div class="guima-modal-info-item" role="listitem">
-            <span class="guima-modal-info-label" id="esfera-label-${museum.id}">Esfera</span>
-            <span class="guima-modal-info-value" aria-labelledby="esfera-label-${museum.id}">${museum.esfera}${museum.esferaDetalhe ? ` - ${museum.esferaDetalhe}` : ''}</span>
-        </div>`;
-    }
-
-    
-
-    content += `</div>`;
-    if (museum.tematica && museum.tematica !== 'Não informado') {
-        content += `<div class="guima-modal-info-item" role="listitem">
-            <span class="guima-modal-info-label" id="tematica-label-${museum.id}">Temática</span>
-            <span class="guima-modal-info-value" aria-labelledby="tematica-label-${museum.id}">${museum.tematica}</span>
-        </div>`;
-    }
-    if (museum.descricao) {
-        content += `<div class="guima-modal-section">
-            <h3 class="guima-modal-section-title">Descrição</h3>
-            <p class="guima-modal-text">${museum.descricao}</p>
-        </div>`;
-    }
-    
-    if (museum.logradouro || museum.municipio) {
-        content += `<div class="guima-modal-section">
-            <h3 class="guima-modal-section-title">Endereço</h3>`;
-        
-        // Adiciona aviso em laranja se LocalizacaoManual for "True"
-        if (museum.localizacaoManual && museum.localizacaoManual === 'True') {
-            content += `<div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 0.25rem;">
-                <p style="margin: 0; color: #856404; font-size: 0.875rem; font-weight: 600;">
-                    Endereço completo indisponível no site MuseusBR. <br/>A informação apresentada pode ser imprecisa.
-                </p>
-            </div>`;
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Raio da Terra em km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
         }
-        
-        if (museum.logradouro) content += `<address style="font-style: normal;"><p class="guima-modal-text">${museum.logradouro}${museum.numero ? `, ${museum.numero}` : ''}${museum.complemento ? ` - ${museum.complemento}` : ''}</p>`;
-        if (museum.municipio) content += `<p class="guima-modal-text">${museum.bairro ? `${museum.bairro} - ` : ''}${museum.municipio}${museum.estadoCompleto ? `, ${museum.estadoCompleto}` : ''}</p>`;
-        if (museum.cep) content += `<p class="guima-modal-text">CEP: ${museum.cep}</p>`;
-        content += `</address></div>`;
-    }
 
-    if (museum.recursosLocomocao.length > 0 || museum.recursosVisualAuditiva.length > 0 || museum.recursosEstrangeira.length > 0) {
-        content += `<div class="guima-modal-section">
-            <h3 class="guima-modal-section-title">Recursos de Acessibilidade</h3>`;
-        
-        if (museum.recursosLocomocao.length > 0) {
-            content += `<div style="margin-bottom: 0.75rem;">
-                <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Dificuldade de locomoção</h4>
-                <ul class="guima-modal-list">`;
-            museum.recursosLocomocao.forEach(r => content += `<li>${r}</li>`);
-            content += `</ul></div>`;
-        }
-        
-        if (museum.recursosVisualAuditiva.length > 0) {
-            content += `<div style="margin-bottom: 0.75rem;">
-                <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Deficiência Visual e Auditiva</h4>
-                <ul class="guima-modal-list">`;
-            museum.recursosVisualAuditiva.forEach(r => content += `<li>${r}</li>`);
-            content += `</ul></div>`;
-        }
-        
-        if (museum.recursosEstrangeira.length > 0) {
-            content += `<div style="margin-bottom: 0.75rem;">
-                <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Pessoa Estrangeira</h4>
-                <ul class="guima-modal-list">`;
-            museum.recursosEstrangeira.forEach(r => content += `<li>${r}</li>`);
-            content += `</ul></div>`;
-        }
-        content += `</div>`;
-    }
-
-    if (museum.visitaGuiaOriginal || museum.atividadesEducativas) {
-        content += `<div class="guima-modal-section">
-            <h3 class="guima-modal-section-title">Recursos para visita e atividades</h3>`;
-        
-        if (museum.visitaGuiaOriginal && museum.visitaGuiaOriginal !== 'Não informado') {
-            content += `<div class="guima-modal-info-item" style="margin-bottom: 0.75rem;">
-                <span class="guima-modal-info-label" id="visita-label-${museum.id}">Visita com guia</span>
-                <span class="guima-modal-info-value" aria-labelledby="visita-label-${museum.id}">${museum.visitaGuiaOriginal}</span>
-            </div>`;
-        }
-        
-        if (museum.atividadesEducativas && museum.atividadesEducativas !== 'Não informado') {
-            content += `<div class="guima-modal-info-item">
-                <span class="guima-modal-info-label" id="atividades-label-${museum.id}">Atividades educativas</span>
-                <span class="guima-modal-info-value" aria-labelledby="atividades-label-${museum.id}">${museum.atividadesEducativas}</span>
-            </div>`;
-        }
-        content += `</div>`;
-    }
-
-    if (museum.horarios || museum.entradaCobrada) {
-        content += `<div class="guima-modal-section">
-            <h3 class="guima-modal-section-title">Informações de visitação</h3>`;
-        
-        if (museum.horarios) {
-            content += `<div class="guima-modal-info-item" style="margin-bottom: 0.75rem;">
-                <span class="guima-modal-info-label" id="horarios-label-${museum.id}">Horários</span>
-                <span class="guima-modal-info-value" aria-labelledby="horarios-label-${museum.id}">${museum.horarios}</span>
-            </div>`;
-        }
-        
-        if (museum.entradaCobrada) {
-            content += `<div class="guima-modal-info-item" style="margin-bottom: 0.75rem;">
-                <span class="guima-modal-info-label" id="entrada-label-${museum.id}">Entrada cobrada</span>
-                <span class="guima-modal-info-value" aria-labelledby="entrada-label-${museum.id}">${museum.entradaCobrada}</span>
-            </div>`;
-        }
-        
-        if (museum.valorEntrada) {
-            content += `<div class="guima-modal-info-item" style="margin-bottom: 0.75rem;">
-                <span class="guima-modal-info-label" id="valor-label-${museum.id}">Valor</span>
-                <span class="guima-modal-info-value" aria-labelledby="valor-label-${museum.id}">${museum.valorEntrada}</span>
-            </div>`;
-        }
-        
-        if (museum.obsEntrada) {
-            content += `<div class="guima-modal-info-item">
-                <span class="guima-modal-info-label" id="obs-label-${museum.id}">Observações</span>
-                <span class="guima-modal-info-value" aria-labelledby="obs-label-${museum.id}">${museum.obsEntrada}</span>
-            </div>`;
-        }
-        content += `</div>`;
-    }
-
-    if (museum.linkMuseusBR || museum.siteOficial || museum.facebook || museum.instagram || museum.youtube) {
-        content += `<div class="guima-modal-section">
-            <h3 class="guima-modal-section-title">Site e redes sociais</h3>
-            <ul class="guima-modal-list" aria-label="Links para site e redes sociais do museu">`;
-        
-        if (museum.linkMuseusBR) content += `<li><a href="${museum.linkMuseusBR}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">Página no MuseusBR<span class="sr-only"> (abre em nova aba)</span></a></li>`;
-        if (museum.siteOficial) content += `<li><a href="${museum.siteOficial}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">Site Oficial<span class="sr-only"> (abre em nova aba)</span></a></li>`;
-        if (museum.facebook) content += `<li><a href="${museum.facebook}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">Facebook<span class="sr-only"> (abre em nova aba)</span></a></li>`;
-        if (museum.instagram) content += `<li><a href="${museum.instagram}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">Instagram<span class="sr-only"> (abre em nova aba)</span></a></li>`;
-        if (museum.youtube) content += `<li><a href="${museum.youtube}" target="_blank" rel="noopener noreferrer" class="guima-modal-link">YouTube<span class="sr-only"> (abre em nova aba)</span></a></li>`;
-        
-        content += `</ul></div>`;
-    }
-
-    // Adiciona cards de sugestão se houver mais de 1 museu filtrado
-    if (currentFilteredMuseums.length > 1) {
-        const nearbyMuseums = getNearbyMuseums(museum, currentFilteredMuseums, 6);
-        
-        if (nearbyMuseums.length > 0) {
-            content += `
-                <div class="guima-nearby-museums">
-                    <h3 class="guima-nearby-title">Outros museus disponíveis nos filtros atuais</h3>
-                    <div class="guima-nearby-grid">
-            `;
-            
-            nearbyMuseums.forEach(nearby => {
-    const badgeClass = getAccessibilityBadgeClass(nearby.statusAcessibilidade);
-    const badgeIcon = getAccessibilityIcon(nearby.statusAcessibilidade);
-    const distanceKm = nearby.distance.toFixed(1);
-    
-    content += `
-        <button class="guima-nearby-card" 
-                data-museum-id="${nearby.id}"
-                aria-label="Ver detalhes de ${nearby.titulo}, distância aproximada de ${distanceKm} quilômetros">
-            <div class="guima-nearby-card-name">${nearby.titulo}</div>
-            <span class="guima-nearby-card-badge ${badgeClass}">
-                ${badgeIcon} ${nearby.statusAcessibilidade || 'Não informado'}
-            </span>
-            <div class="guima-nearby-card-distance">Distância aproximada: ${distanceKm} km</div>
-        </button>
-    `;
-});
-            
-            content += `
-                    </div>
-                </div>
-            `;
-        }
-    }
-
-    content += `<button class="guima-modal-button" onclick="closeModal()">Fechar e voltar ao mapa</button>`;
-
-    document.getElementById('modalContent').innerHTML = content;
-    document.getElementById('modal').setAttribute('aria-labelledby', 'modal-museum-title');
-    
-    const modalElement = document.getElementById('modal');
-    modalElement.classList.remove('hidden');
-
-    // Scroll para o topo do modal
-    const modalContainer = document.querySelector('.guima-modal');
-    if (modalContainer) {
-        modalContainer.scrollTop = 0;
-    }
-
-    // Armazena o elemento que tinha foco antes do modal abrir
-    const previousFocus = document.activeElement;
-    
-    // Aguarda o modal estar completamente renderizado
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            // Foca no botão de fechar primeiro (mais acessível)
-            const closeButton = document.getElementById('modalClose');
-            if (closeButton) {
-                closeButton.focus();
+        function getAccessibilityBadgeClass(status) {
+            switch (status) {
+                case 'Acessível': return 'acessivel';
+                case 'Parcialmente Acessível': return 'parcial';
+                case 'Sem Recursos': return 'sem-recursos';
+                default: return 'info-insuficiente';
             }
-            
-            // Configura trap de foco
-            trapFocus(document.querySelector('.guima-modal'));
-            
-            // Armazena referência para restaurar foco ao fechar
-            modalElement.dataset.previousFocus = previousFocus?.id || '';
-            
-            // Configura eventos nos cards de sugestão
-            if (currentFilteredMuseums.length > 1) {
-                setupNearbyCardsEvents(currentFilteredMuseums);
+        }
+
+        function getAccessibilityIcon(status) {
+            const icons = {
+                'Acessível': { iconClass: 'marker-acessivel', iconSymbol: '✓' },
+                'Parcialmente Acessível': { iconClass: 'marker-parcial', iconSymbol: '!' },
+                'Sem Recursos': { iconClass: 'marker-sem-recursos', iconSymbol: '✕' },
+                'default': { iconClass: 'marker-info-insuficiente', iconSymbol: '?' }
+            };
+            return icons[status] || icons['default'];
+        }
+
+        // Função auxiliar para badges nos cards (retorna apenas o símbolo)
+        function getAccessibilitySymbol(status) {
+            switch (status) {
+                case 'Acessível': return '✓';
+                case 'Parcialmente Acessível': return '!';
+                case 'Sem Recursos': return '✕';
+                default: return '?';
             }
-        });
-    });
+        }
+
+        function setupNearbyCardsEvents(filteredMuseums) {
+            document.querySelectorAll('.guima-nearby-card').forEach(card => {
+                card.onclick = () => {
+                    const museumId = card.dataset.museumId;
+                    const museum = filteredMuseums.find(m => m.id === museumId);
+                    if (museum) {
+                        showModal(museum, filteredMuseums);
+                    }
+                };
+            });
+        }
+
+       function openModal() {
+  const modalElement = document.getElementById('modal');
+
+  // Salva o elemento que estava com foco no momento
+  lastFocusedElement = document.activeElement;
+
+  // Mostra o modal
+  modalElement.classList.remove('hidden');
+  modalElement.setAttribute('aria-modal', 'true');
+  document.body.style.overflow = 'hidden';
+
+  // Move foco para o modal ou para o primeiro botão nele
+  modalElement.querySelector('button, [tabindex="0"], a, input, select, textarea')?.focus();
 }
 
+       function closeModal() {
+  const modalElement = document.getElementById('modal');
+  const previousFocusId = modalElement.dataset.previousFocus;
 
+  modalElement.classList.add('hidden');
 
-function getNearbyMuseums(currentMuseum, allMuseums, limit) {
-    // Filtra o museu atual
-    const others = allMuseums.filter(m => m.id !== currentMuseum.id);
-    
-    // Calcula distância de cada museu
-    const withDistance = others.map(m => ({
-        ...m,
-        distance: calculateDistance(
-            currentMuseum.localizacao.lat,
-            currentMuseum.localizacao.lng,
-            m.localizacao.lat,
-            m.localizacao.lng
-        )
-    }));
-    
-    // Ordena por distância e pega os mais próximos
-    return withDistance
-        .sort((a, b) => a.distance - b.distance)
-        .slice(0, limit);
-}
+  // ✅ Acessibilidade
+  document.body.style.overflow = '';
+  announceToScreenReader('Modal fechado');
 
-function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Raio da Terra em km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = 
-        Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
-}
+  // 1) Tenta focar o layer salvo (marker ou cluster)
+  if (lastFocusedLayer) {
+    // Delay curto para cobrir casos onde o DOM do marker/cluster foi recriado
+    setTimeout(() => {
+      try {
+        const el = (typeof lastFocusedLayer.getElement === 'function')
+          ? lastFocusedLayer.getElement()
+          : lastFocusedLayer; // caso seja uma referência DOM por algum motivo
 
-function getAccessibilityBadgeClass(status) {
-    switch(status) {
-        case 'Acessível': return 'acessivel';
-        case 'Parcialmente Acessível': return 'parcial';
-        case 'Sem Recursos': return 'sem-recursos';
-        default: return 'info-insuficiente';
-    }
-}
+        if (el) {
+          // se dentro do elemento houver um filho com role=button (nos clusters usamos <div role="button">), foca ele
+          const focusable = el.querySelector && el.querySelector('[role="button"]') || el;
+          if (focusable && typeof focusable.focus === 'function') {
+            focusable.focus();
+            lastFocusedLayer = null;
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Erro ao restaurar foco no layer:', err);
+      }
 
-function getAccessibilityIcon(status) {
-    switch(status) {
-        case 'Acessível': return '✓';
-        case 'Parcialmente Acessível': return '!';
-        case 'Sem Recursos': return '✕';
-        default: return '?';
-    }
-}
-
-function setupNearbyCardsEvents(filteredMuseums) {
-    // Configura cliques nos cards de museus próximos
-    document.querySelectorAll('.guima-nearby-card').forEach(card => {
-        card.onclick = () => {
-            const museumId = card.dataset.museumId;
-            const museum = filteredMuseums.find(m => m.id === museumId);
-            if (museum) {
-                showModal(museum, filteredMuseums);
-            }
-        };
-    });
-}
-
-////////////////////////
-
-        function closeModal() {
-    const modalElement = document.getElementById('modal');
-    const previousFocusId = modalElement.dataset.previousFocus;
-    
-    modalElement.classList.add('hidden');
-    
-    // Restaura o foco para o elemento anterior
-    if (previousFocusId) {
+      // se não foi possível focar, tenta fallback por id
+      if (previousFocusId) {
         const previousElement = document.getElementById(previousFocusId);
         if (previousElement) {
-            previousElement.focus();
+          previousElement.focus();
+          lastFocusedLayer = null;
+          return;
         }
-    } else {
-        // Se não houver elemento anterior, volta para o mapa
-        const mapElement = document.getElementById('map');
-        if (mapElement) {
-            mapElement.focus();
-        }
+      }
+
+      // fallback final: foco no mapa
+      const mapElement = document.getElementById('map');
+      if (mapElement) mapElement.focus();
+      lastFocusedLayer = null;
+    }, 50); // 50ms costuma ser suficiente; pode ajustar (20-200ms) conforme necessidade
+    return;
+  }
+
+  // 2) Se não há lastFocusedLayer, tenta fallback por id (sua lógica original)
+  if (previousFocusId) {
+    const previousElement = document.getElementById(previousFocusId);
+    if (previousElement) {
+      previousElement.focus();
+      return;
     }
+  }
+
+  // 3) fallback final: foco no mapa
+  const mapElement = document.getElementById('map');
+  if (mapElement) mapElement.focus();
 }
+
+
+
+
+        // ========== EVENT LISTENERS (mesmo do original) ==========
 
         document.getElementById('clearFilters').onclick = () => {
             state.selectedMuseums = [];
@@ -2358,24 +2611,35 @@ function setupNearbyCardsEvents(filteredMuseums) {
             state.selectedRecursos = [];
             state.selectedEstados = [];
             state.selectedVisitaGuia = '';
+            state.selectedEntrada = '';
             document.getElementById('searchInput').value = '';
-            
+
             document.getElementById('statusTodos').checked = true;
             document.getElementById('visitaTodos').checked = true;
-            
+            document.getElementById('entradaTodos').checked = true;
+
+            announceToScreenReader('Todos os filtros foram limpos');
             updateFilters();
         };
 
-        document.getElementById('modalClose').onclick = closeModal;
         document.getElementById('modal').onclick = closeModal;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !document.getElementById('modal').classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+        // ========== BUSCA (com melhorias de acessibilidade) ==========
 
         const searchInput = document.getElementById('searchInput');
         const suggestions = document.getElementById('suggestions');
-        
+
         searchInput.oninput = (e) => {
             const value = e.target.value;
             if (value.length < 3) {
                 suggestions.classList.add('hidden');
+                suggestions.setAttribute('aria-expanded', 'false');
                 return;
             }
 
@@ -2386,47 +2650,102 @@ function setupNearbyCardsEvents(filteredMuseums) {
 
             if (filtered.length > 0) {
                 suggestions.innerHTML = '';
-                filtered.forEach(museum => {
+
+                filtered.forEach((museum, index) => {
                     const item = document.createElement('button');
                     item.className = 'guima-suggestion-item';
                     item.setAttribute('role', 'option');
-                    item.innerHTML = `<div class="guima-suggestion-title">${museum.titulo}</div>
-                        <div class="guima-suggestion-location">${museum.municipio}, ${museum.estadoCompleto}</div>`;
+                    item.setAttribute('id', `suggestion-${index}`);
+                    item.innerHTML = `<div class="guima-suggestion-title">${museum.titulo}</div><div class="guima-suggestion-location">${museum.municipio}, ${museum.estadoCompleto}</div>`;
+
                     item.onclick = () => {
                         state.selectedMuseums.push(museum);
                         searchInput.value = '';
                         suggestions.classList.add('hidden');
+                        suggestions.setAttribute('aria-expanded', 'false');
+                        announceToScreenReader(`${museum.titulo} adicionado aos filtros`);
                         updateFilters();
                     };
+
+                    item.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowDown' && index < filtered.length - 1) {
+                            e.preventDefault();
+                            document.getElementById(`suggestion-${index + 1}`).focus();
+                        } else if (e.key === 'ArrowUp' && index > 0) {
+                            e.preventDefault();
+                            document.getElementById(`suggestion-${index - 1}`).focus();
+                        } else if (e.key === 'Escape') {
+                            suggestions.classList.add('hidden');
+                            suggestions.setAttribute('aria-expanded', 'false');
+                            searchInput.focus();
+                        }
+                    });
+
                     suggestions.appendChild(item);
                 });
+
                 suggestions.classList.remove('hidden');
+                suggestions.setAttribute('aria-expanded', 'true');
+                announceToScreenReader(`${filtered.length} sugestões encontradas`);
             } else {
                 suggestions.classList.add('hidden');
+                suggestions.setAttribute('aria-expanded', 'false');
             }
         };
+
+        // ========== DROPDOWNS COM NAVEGAÇÃO POR TECLADO ==========
+
+        function setupDropdownKeyboardNavigation(name) {
+            const dropdown = document.getElementById(`${name}Dropdown`);
+            const optionsContainer = document.getElementById(`${name}Options`);
+
+            dropdown.addEventListener('keydown', (e) => {
+                const items = Array.from(optionsContainer.querySelectorAll('.guima-dropdown-item input'));
+                const currentIndex = items.indexOf(document.activeElement);
+
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        const nextIndex = Math.min(currentIndex + 1, items.length - 1);
+                        items[nextIndex]?.focus();
+                        break;
+
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        const prevIndex = Math.max(currentIndex - 1, 0);
+                        items[prevIndex]?.focus();
+                        break;
+
+                    case 'Home':
+                        e.preventDefault();
+                        items[0]?.focus();
+                        break;
+
+                    case 'End':
+                        e.preventDefault();
+                        items[items.length - 1]?.focus();
+                        break;
+                }
+            });
+        }
 
         ['tematica', 'acessibilidade', 'recursos', 'estados'].forEach(name => {
             const button = document.getElementById(`${name}Button`);
             const dropdown = document.getElementById(`${name}Dropdown`);
             const search = document.getElementById(`${name}Search`);
             const group = document.getElementById(`${name}Group`);
-            const optionsContainer = document.getElementById(`${name}Options`);
 
             dropdown.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-            
-            optionsContainer.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
 
             button.onclick = (e) => {
                 if (e.target.classList.contains('guima-tag')) return;
-                
                 e.stopPropagation();
+
                 const isHidden = dropdown.classList.contains('hidden');
-                
+
+                // Fecha outros dropdowns
                 ['tematica', 'acessibilidade', 'recursos', 'estados'].forEach(otherName => {
                     if (otherName !== name) {
                         const otherDropdown = document.getElementById(`${otherName}Dropdown`);
@@ -2434,14 +2753,13 @@ function setupNearbyCardsEvents(filteredMuseums) {
                         if (!otherDropdown.classList.contains('hidden')) {
                             otherDropdown.classList.add('hidden');
                             otherButton.setAttribute('aria-expanded', 'false');
-                            updateMap();
                         }
                     }
                 });
-                
+
                 dropdown.classList.toggle('hidden');
                 button.setAttribute('aria-expanded', !isHidden);
-                
+
                 if (!dropdown.classList.contains('hidden') && search) {
                     setTimeout(() => search.focus(), 10);
                 }
@@ -2449,8 +2767,16 @@ function setupNearbyCardsEvents(filteredMuseums) {
 
             if (search) {
                 search.oninput = () => {
-                    const options = state.filterOptions[name === 'tematica' ? 'tematicas' : name === 'acessibilidade' ? 'statusAcessibilidade' : name === 'recursos' ? 'recursos' : 'estados'];
-                    const selected = name === 'tematica' ? state.selectedTematicas : name === 'acessibilidade' ? state.selectedAcessibilidade : name === 'recursos' ? state.selectedRecursos : state.selectedEstados;
+                    const options = state.filterOptions[
+                        name === 'tematica' ? 'tematicas' :
+                            name === 'acessibilidade' ? 'statusAcessibilidade' :
+                                name === 'recursos' ? 'recursos' : 'estados'
+                    ];
+                    const selected = state[
+                        name === 'tematica' ? 'selectedTematicas' :
+                            name === 'acessibilidade' ? 'selectedAcessibilidade' :
+                                name === 'recursos' ? 'selectedRecursos' : 'selectedEstados'
+                    ];
                     createMultiSelect(name, options, selected);
                 };
             }
@@ -2475,6 +2801,8 @@ function setupNearbyCardsEvents(filteredMuseums) {
                     button.focus();
                 }
             });
+
+            setupDropdownKeyboardNavigation(name);
         });
 
         document.addEventListener('click', (e) => {
@@ -2482,14 +2810,7 @@ function setupNearbyCardsEvents(filteredMuseums) {
                 const group = document.getElementById(`${name}Group`);
                 const dropdown = document.getElementById(`${name}Dropdown`);
                 const button = document.getElementById(`${name}Button`);
-                
-                const clickedDropdownItem = e.target.closest('.guima-dropdown-item');
-                const clickedInsideDropdown = dropdown.contains(e.target);
-                
-                if (clickedInsideDropdown || clickedDropdownItem) {
-                    return;
-                }
-                
+
                 if (!group.contains(e.target) && !dropdown.classList.contains('hidden')) {
                     dropdown.classList.add('hidden');
                     button.setAttribute('aria-expanded', 'false');
@@ -2499,70 +2820,46 @@ function setupNearbyCardsEvents(filteredMuseums) {
             });
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !document.getElementById('modal').classList.contains('hidden')) {
-                closeModal();
+        // ========== INICIALIZAÇÃO DO MAPA COM OTIMIZAÇÕES ==========
+
+
+        const isMobile = window.innerWidth <= 1024;
+
+        // ✅ OTIMIZAÇÃO: preferCanvas + renderer para melhor performance
+        if (isMobile && typeof L.Map.addInitHook === 'function') {
+            state.map = L.map('map', {
+                preferCanvas: true,
+                renderer: L.canvas({ tolerance: 15 }),
+                gestureHandling: true,
+                gestureHandlingOptions: {
+                    text: {
+                        touch: "Use dois dedos para mover o mapa",
+                        scroll: "Segure Ctrl para aproximar",
+                        scrollMac: "Segure ⌘ para aproximar"
+                    },
+                    duration: 5000
+                },
+                minZoom: 4,
+                maxZoom: 18
+            }).setView([-14.235, -51.925], 4);
+        } else {
+            state.map = L.map('map', {
+                preferCanvas: true,
+                renderer: L.canvas({ tolerance: 15 }),
+                scrollWheelZoom: true,
+                minZoom: 4,
+                maxZoom: 18
+            }).setView([-14.235, -51.925], 4);
+        }
+
+        window.addEventListener('resize', () => {
+            const nowMobile = window.innerWidth <= 1024;
+            if (nowMobile) {
+                state.map.scrollWheelZoom.disable();
+            } else {
+                state.map.scrollWheelZoom.enable();
             }
         });
-
-       // Define os limites do Brasil
-const brasilBounds = [
-    [-33.75, -73.98], // Sudoeste (ponto mais ao sul e oeste)
-    [5.27, -34.79]    // Nordeste (ponto mais ao norte e leste)
-];
-
-// Detecta se é mobile
-const isMobile = window.innerWidth <= 1024;
-
-// Aguarda o plugin carregar
-if (isMobile && typeof L.Map.addInitHook === 'function') {
-    state.map = L.map('map', {
-        gestureHandling: true,
-        gestureHandlingOptions: {
-            text: {
-                touch: "Use dois dedos para mover o mapa",
-                scroll: "Segure a tecla ctrl para aproximar o mapa",
-                scrollMac: "Segure a tecla ⌘ para aproximar o mapa"
-            },
-            duration: 5000
-        },
-        maxBounds: brasilBounds,           // Define os limites máximos
-        maxBoundsViscosity: 1.0,           // Torna os limites "rígidos" (não permite arrastar para fora)
-        minZoom: 4,                         // Zoom mínimo (visão geral do Brasil)
-        maxZoom: 18                         // Zoom máximo
-    }).setView([-14.235, -51.925], 4);
-} else {
-    // Desktop ou fallback
-    state.map = L.map('map', {
-        scrollWheelZoom: true,
-        maxBounds: brasilBounds,           // Define os limites máximos
-        maxBoundsViscosity: 1.0,           // Torna os limites "rígidos"
-        minZoom: 4,                         // Zoom mínimo
-        maxZoom: 18                         // Zoom máximo
-    }).setView([-14.235, -51.925], 4);
-}
-
-// Ajusta comportamento ao redimensionar (sem reload)
-window.addEventListener('resize', () => {
-    const nowMobile = window.innerWidth <= 1024;
-    
-    if (nowMobile) {
-        state.map.scrollWheelZoom.disable();
-    } else {
-        state.map.scrollWheelZoom.enable();
-    }
-});
-
-// Ajusta comportamento ao redimensionar (sem reload)
-window.addEventListener('resize', () => {
-    const nowMobile = window.innerWidth <= 1024;
-    
-    if (nowMobile) {
-        state.map.scrollWheelZoom.disable();
-    } else {
-        state.map.scrollWheelZoom.enable();
-    }
-});
 
         const lightTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors',
@@ -2582,9 +2879,109 @@ window.addEventListener('resize', () => {
 
         state.lightTileLayer = lightTileLayer;
         state.darkTileLayer = darkTileLayer;
-        state.markersLayer = L.layerGroup().addTo(state.map);
+
+        // ✅ CLUSTERING: MarkerClusterGroup para performance
+        // 📍 Criação da camada de clusters com acessibilidade nativa
+state.markersLayer = L.markerClusterGroup({
+  maxClusterRadius: 50,
+  spiderfyOnMaxZoom: true,
+  showCoverageOnHover: false,
+  zoomToBoundsOnClick: true,
+  chunkedLoading: true,
+  chunkInterval: 200,
+  chunkDelay: 50,
+
+  iconCreateFunction: function (cluster) {
+    const count = cluster.getChildCount();
+    let sizeClass = 'small';
+    if (count > 100) sizeClass = 'large';
+    else if (count > 10) sizeClass = 'medium';
+
+    // --- 📊 Calcula a descrição acessível ---
+    const markers = cluster.getAllChildMarkers();
+    const municipios = {};
+
+    markers.forEach(marker => {
+      if (marker.museumData && marker.museumData.municipio) {
+        const key = `${marker.museumData.municipio}, ${marker.museumData.estadoComp}`;
+        municipios[key] = (municipios[key] || 0) + 1;
+      }
+    });
+
+    // 📌 Encontra o município mais frequente no cluster
+    let mainLocation = '';
+    let maxCount = 0;
+    for (const [location, locationCount] of Object.entries(municipios)) {
+      if (locationCount > maxCount) {
+        maxCount = locationCount;
+        mainLocation = location;
+      }
+    }
+
+    // 🧠 Monta o aria-label
+    let ariaLabel = '';
+    if (mainLocation) {
+      if (Object.keys(municipios).length === 1) {
+        ariaLabel = `${count} museus em ${mainLocation}. Pressione Enter para expandir`;
+      } else {
+        ariaLabel = `${count} museus, principalmente em ${mainLocation}. Pressione Enter para expandir`;
+      }
+    } else {
+      ariaLabel = `Grupo de ${count} museus. Pressione Enter para expandir`;
+    }
+
+    // ✅ ACESSIBILIDADE: Clusters navegáveis por teclado com localização
+        state.markersLayer.on('clustermouseover clusteradd', function (e) {
+            const cluster = e.layer;
+            const clusterElement = cluster.getElement();
+
+            
+        });
+
+    // --- 🪄 Retorna o ícone acessível ---
+    return L.divIcon({
+      html: `
+        <div class="btgrupo" role="button" tabindex="-1" aria-label="${ariaLabel}">
+          ${count}
+        </div>
+      `,
+      className: `marker-cluster marker-cluster-${sizeClass}`,
+      iconSize: L.point(40, 40)
+    });
+  }
+}).addTo(state.map);
+
+document.addEventListener('keydown', function (e) {
+  // Verifica se o alvo do foco está DENTRO de um marker cluster
+  const clusterButton = e.target.closest('.btgrupo');
+  if ((e.key === 'Enter' || e.key === ' ') && clusterButton) {
+    e.preventDefault();
+
+    // Encontrar o layer correspondente ao elemento clicado
+    const cluster = state.markersLayer.getLayers().find(layer =>
+      layer.getElement && layer.getElement() === clusterButton
+    );
+
+    if (cluster) {
+      cluster.zoomToBounds();
+
+      const ariaLabel = clusterButton.querySelector('[aria-label]')?.getAttribute('aria-label') 
+                      || clusterButton.getAttribute('aria-label');
+      if (ariaLabel) {
+        announceToScreenReader(ariaLabel.replace('Pressione Enter para expandir', 'Expandindo'));
+      }
+    }
+  }
+});
+
+
         
+
+        
+
+        // ✅ CARREGA OS DADOS
         loadCSVData();
     </script>
 </body>
+
 </html>
