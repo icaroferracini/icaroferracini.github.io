@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Dados - GUIA DE MUSEUS ACESSÍVEIS DO BRASIL - GuiMA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1351b4;
+            --bg-secondary: #ebebeb;
+            --text-primary: #ffffff;
+            --text-secondary: #111;
+            --link: #1351b4;
+            --button-bg: #1351b4;
+            --button-text: #ffffff;
+            --content-bg: #ffffff;
+            --focus-outline: #ffcd07;
+            --bg-square: #DDD;
+        }
+
+        body.dark-mode {
+            --bg-primary: #071d41;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #f8f9fa;
+            --text-secondary: #e0e0e0;
+            --link: #6bb3ff;
+            --button-bg: #2968d8;
+            --button-text: #ffffff;
+            --content-bg: #0f0f0f;
+            --focus-outline: #ffcd07;
+            --bg-square: #333;
+        }
+
+        html {
+            font-size: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--content-bg);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .skip-link {
+            color: var(--text-primary);
+            z-index: -10000;
+            border: none;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .skip-link:focus {
+            z-index: 10000;
+            outline: 2px solid var(--focus-outline);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        .top-header {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 0.75rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .site-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.03125rem;
+        }
+
+        .accessibility-controls {
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+        }
+
+        .accessibility-controls button,
+        .accessibility-controls a {
+            background: transparent;
+            color: var(--text-primary);
+            border: none;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+            font-weight: 500;
+        }
+
+        .accessibility-controls button:hover,
+        .accessibility-controls a:hover {
+            opacity: 0.85;
+        }
+
+        .accessibility-controls button:focus,
+        .accessibility-controls a:focus {
+            outline: 2px solid var(--focus-outline);
+            outline-offset: 2px;
+            border-radius: 4px;
+            opacity: 1;
+        }
+
+        .main-header {
+            background-color: var(--content-bg);
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--link);
+            text-decoration: none;
+            letter-spacing: -0.0625rem;
+        }
+
+        .logo:hover {
+            opacity: 0.85;
+        }
+
+        .logo:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 0.25rem;
+            border-radius: 0.5rem;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .nav-button {
+            background-color: transparent;
+            color: var(--link);
+            border: 2px solid var(--button-bg);
+            padding: 0.75rem 1.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6.25rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        body.dark-mode .nav-button {
+            color: var(--text-primary);
+            border-color: var(--button-bg);
+        }
+
+        .nav-button:hover {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            box-shadow: 0 0.25rem 0.5rem rgba(19, 81, 180, 0.2);
+        }
+
+        .nav-button:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .nav-button.active {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .content-area {
+            background-color: var(--bg-secondary);
+            min-height: 31.25rem;
+            padding: 2.5rem;
+        }
+
+        .back-to-top {
+            position: absolute;
+            left: -9999px;
+            color: var(--button-text);
+            background: var(--button-bg);
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 0.25rem;
+            z-index: 10000;
+        }
+
+        .back-to-top:focus {
+            position: fixed;
+            bottom: 2.5rem;
+            left: 2rem;
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+            color: var(--button-text);
+            background: var(--button-bg);
+        }
+
+        .footer {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 1rem 2.5rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.875rem;
+            font-weight: 400;
+            letter-spacing: 0.03125rem;
+            line-height: 1.6;
+            max-width: 56.25rem;
+            margin: 0 auto;
+        }
+
+        .article-section {
+            margin: 0 auto 3rem;
+            background: var(--content-bg);
+            padding: 2.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .article-section h2 {
+            color: var(--link);
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .article-section h3 {
+            color: var(--link);
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 600;
+        }
+
+        .article-section p {
+            margin-bottom: 1rem;
+        }
+
+        /* Estilos do gráfico de estatísticas */
+        .card-title {
+            color: var(--link);
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .filter-section {
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            /*border-bottom: 2px solid var(--bg-secondary);*/
+        }
+
+        .filter-description {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            margin-bottom: 1.25rem;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.4rem 0.65rem;
+            border: 2px solid var(--bg-secondary);
+            border-radius: 0.5rem;
+            background-color: var(--content-bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            min-height: 3rem;
+        }
+
+        .radio-option input[type="radio"]:checked+.radio-label {
+            border-color: var(--button-bg);
+            background-color: var(--content-bg);
+        }
+
+        .radio-option input[type="radio"]:hover+.radio-label {
+            border-color: var(--button-bg);
+            opacity: 0.8;
+        }
+
+        .radio-option input[type="radio"]:focus+.radio-label {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .radio-indicator {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .radio-option input[type="radio"]:checked+.radio-label .radio-indicator {
+            border-color: var(--button-bg);
+            background-color: var(--button-bg);
+        }
+
+        .radio-indicator::after {
+            content: '';
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: var(--button-text);
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+
+        .radio-option input[type="radio"]:checked+.radio-label .radio-indicator::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-item:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .percentage {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0rem;
+            letter-spacing: -0.03125rem;
+        }
+
+        .label {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .grid {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 0.375rem;
+            margin-bottom: 1.25rem;
+            width: 100%;
+        }
+
+        .grid-row {
+            display: flex;
+            gap: 0.375rem;
+        }
+
+        .square {
+            flex: 1;
+            aspect-ratio: 1;
+            border-radius: 0.125rem;
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .square.empty {
+            background-color: var(--bg-square);
+        }
+
+        .square.animating {
+            transition: background-color 0.15s ease-out, opacity 0.15s ease-out;
+        }
+
+        .total {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .total-label {
+            text-align: center;
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        #statsContainer {
+            max-width: 1256px;
+            margin: auto;
+        }
+
+        .radio-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: repeat(2, auto);
+            gap: 0.5rem;
+            max-width: 1256px;
+            margin: auto;
+        }
+
+        /*###############################################################*/
+        /*####################################################################*/
+        /*####################################################################*/
+        /* Sparkline Table Styles */
+        .sparkline-table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        .sparkline-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .sparkline-table caption {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: left;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--bg-secondary);
+        }
+
+        .sparkline-table thead {
+            background-color: var(--bg-secondary);
+        }
+
+        .sparkline-table th {
+            padding: 0.875rem 0.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease;
+            position: relative;
+            font-size: 0.8125rem;
+        }
+
+        .sparkline-table th:hover {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .sparkline-table th:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: -3px;
+        }
+
+        .sparkline-table th.sortable::after {
+            content: '⇅';
+            margin-left: 0.25rem;
+            opacity: 0.5;
+            font-size: 0.75rem;
+        }
+
+        .sparkline-table th.sorted-asc::after {
+            content: '▲';
+            opacity: 1;
+        }
+
+        .sparkline-table th.sorted-desc::after {
+            content: '▼';
+            opacity: 1;
+        }
+
+        .sparkline-table tbody tr {
+            border-bottom: 1px solid var(--bg-secondary);
+            transition: background-color 0.2s ease;
+        }
+
+        .sparkline-table tbody tr:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .sparkline-table td {
+            padding: 0.75rem 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .estado-name {
+            font-weight: 600;
+            white-space: normal;
+            min-width: 150px;
+        }
+
+        .total-museus {
+            text-align: center;
+            font-weight: 600;
+            min-width: 60px;
+        }
+
+        .sparkline-cell {
+            min-width: 140px;
+        }
+
+        .category-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .sparkline-mini-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bar-visual {
+            height: 0.875rem;
+            border-radius: 0.25rem;
+            transition: width 0.4s ease-out;
+            min-width: 2px;
+            flex-shrink: 0;
+        }
+
+        .bar-visual.acessivel {
+            background-color: #2d9f4f;
+        }
+
+        .bar-visual.parcial {
+            background-color: #f5b800;
+        }
+
+        .bar-visual.sem-recursos {
+            background-color: #e74c5c;
+        }
+
+        .bar-visual.insuficiente {
+            background-color: #6b7885;
+        }
+
+        .bar-info {
+            display: flex;
+            align-items: baseline;
+            gap: 0.375rem;
+            font-size: 0.8125rem;
+            white-space: nowrap;
+        }
+
+        .bar-percentage {
+            font-weight: 600;
+            min-width: 38px;
+        }
+
+        .bar-count {
+            color: var(--text-secondary);
+            opacity: 0.75;
+            font-size: 0.75rem;
+        }
+
+        .sparkline-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-top: 0.5rem;
+            justify-content: center;
+        }
+
+        .legend-item-sparkline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+        }
+
+        .legend-color {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 0.125rem;
+        }
+
+        .sort-announcement {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        .show-more-container {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .show-more-button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .show-more-button:hover {
+            opacity: 1;
+        }
+
+        .show-more-button:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .hidden-row {
+            display: none;
+        }
+
+        /*####################################################################*/
+        /*####################################################################*/
+        /*####################################################################*/
+
+        @media (max-width: 1024px) {
+
+            .top-header,
+            .main-header {
+                padding: 1rem 1.25rem;
+            }
+
+            .top-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .site-title {
+                font-size: 0.75rem;
+            }
+
+            .accessibility-controls {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+                gap: 0.75rem;
+                position: relative;
+            }
+
+            .accessibility-controls .skip-link {
+                position: absolute;
+                left: -9999px;
+            }
+
+            .accessibility-controls .skip-link:focus {
+                position: absolute;
+                left: auto;
+                top: -0.5rem;
+                z-index: 10001;
+                background: var(--button-bg);
+                color: var(--button-text);
+                padding: 0.5rem 1rem;
+                border-radius: 0.25rem;
+                width: 100%;
+            }
+
+            .main-header {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .logo {
+                font-size: 3rem;
+            }
+
+            .main-nav {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.625rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                text-align: center;
+                padding: 0.75rem 1.25rem;
+            }
+
+            .footer {
+                padding: 0.75rem 1.25rem;
+            }
+
+            .content-area {
+                padding: 0.5rem;
+            }
+
+            .article-section {
+                padding: 1.5rem;
+            }
+
+            .stats-card {
+                padding: 1.5rem;
+            }
+
+            .radio-group {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: repeat(3, auto);
+                gap: 0.5rem;
+            }
+
+            .radio-label {
+                justify-content: flex-start;
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 2rem;
+            }
+
+            .percentage {
+                font-size: 2.5rem;
+            }
+
+            .total {
+                font-size: 1.75rem;
+            }
+
+            .grid {
+                gap: 0.25rem;
+            }
+
+            .grid-row {
+                gap: 0.25rem;
+            }
+
+            /*####################################################################*/
+            /*####################################################################*/
+            /*####################################################################*/
+
+            .sparkline-table {
+                font-size: 0.75rem;
+            }
+
+            .sparkline-table th,
+            .sparkline-table td {
+                padding: 0.625rem 0.375rem;
+            }
+
+            .bar-info {
+                font-size: 0.75rem;
+            }
+
+            .bar-count {
+                font-size: 0.6875rem;
+            }
+
+            .sparkline-cell {
+                min-width: 120px;
+            }
+
+            .bar-visual {
+                height: 1.5rem;
+            }
+
+            /* Layout customizado para tablet */
+            .sparkline-table thead {
+                display: none;
+            }
+
+            .sparkline-table tbody tr {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+                gap: 0.75rem;
+                margin-bottom: 1rem;
+                padding: 1rem;
+                border: 1px solid var(--bg-secondary);
+                border-radius: 0.5rem;
+                background-color: var(--content-bg);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .sparkline-table tbody tr:hover {
+                background-color: var(--content-bg);
+            }
+
+            .sparkline-table td {
+                padding: 0;
+                border: none;
+            }
+
+            /* Primeira linha: Estado e Total */
+            .estado-name {
+
+
+                font-size: 1.3rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+            }
+
+
+            .total-museus {
+
+                font-size: 1rem;
+                font-weight: 500;
+                text-align: left;
+                margin-top: 0.25rem;
+
+            }
+
+            .total-museus::after {
+                content: ' museus';
+                font-weight: 500;
+            }
+
+            .total-museus::before {
+                content: 'Total de ';
+                font-weight: 500;
+            }
+
+            /* Segunda linha: 4 colunas de acessibilidade */
+            .sparkline-cell:nth-of-type(3) {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .sparkline-cell:nth-of-type(4) {
+                grid-column: 2;
+                grid-row: 2;
+            }
+
+            .sparkline-cell:nth-of-type(5) {
+                grid-column: 1;
+                grid-row: 3;
+            }
+
+            .sparkline-cell:nth-of-type(6) {
+                grid-column: 2;
+                grid-row: 3;
+            }
+
+            .sparkline-cell {
+                min-width: auto;
+            }
+
+            #sparklineTableBody tr.hidden-row {
+                display: none !important;
+            }
+
+            /* Adiciona labels antes de cada célula */
+            .sparkline-cell::before {
+                content: attr(data-label);
+                display: block;
+                font-weight: 600;
+                font-size: 0.8rem;
+                color: var(--link);
+                margin-bottom: 0.25rem;
+            }
+
+            .bar-percentage {
+                min-width: auto;
+                font-size: 0.85rem;
+                font-weight: 500;
+            }
+
+            .bar-count {
+                display: inline;
+                font-size: 0.6875rem;
+            }
+
+
+            /*####################################################################*/
+            /*####################################################################*/
+            /*####################################################################*/
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="top-header">
+            <h1 class="site-title">GUIA DE MUSEUS ACESSÍVEIS DO BRASIL</h1>
+            <nav class="accessibility-controls" aria-label="Controles de acessibilidade">
+                <a href="#main-content" class="skip-link" tabindex="0">Ir para o conteúdo</a>
+                <button id="darkModeToggle" tabindex="0" aria-label="Alternar modo escuro">🌙 Modo escuro</button>
+                <button id="increaseText" tabindex="0" aria-label="Aumentar tamanho do texto">🔼 Aumentar texto</button>
+                <button id="decreaseText" tabindex="0" aria-label="Diminuir tamanho do texto">🔽 Diminuir texto</button>
+            </nav>
+        </div>
+
+        <div class="main-header">
+            <a href="#" class="logo" tabindex="0" aria-label="Guima - Página inicial">GuiMA</a>
+            <nav id="main-nav" class="main-nav" aria-label="Menu principal">
+                <a href="index.html" class="nav-button" tabindex="0">Mapa de museus</a>
+                <a href="analise-de-dados.html" class="nav-button active" tabindex="0">Análise de dados</a>
+                <!--<a href="metodologia.html" class="nav-button" tabindex="0">Metodologia</a>-->
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" class="content-area">
+        <article>
+            <section class="article-section">
+                <h2 class="card-title">Porcentagem de museus com acessibilidade no Brasil</h2>
+
+                <div class="filter-section">
+                    <p class="filter-description">
+                        Selecione a esfera do museu para consultar a completude das informações oficiais sobre
+                        acessibilidade
+                    </p>
+
+                    <div class="radio-group" role="radiogroup" aria-label="Esfera do museu">
+                        <div class="radio-option">
+                            <input type="radio" id="sphere-todos" name="sphere" value="todos" checked>
+                            <label for="sphere-todos" class="radio-label">
+                                <span class="radio-indicator"></span>
+                                <span><strong>Todos cadastrados</strong> (4024 museus)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" id="sphere-publica" name="sphere" value="publica">
+                            <label for="sphere-publica" class="radio-label">
+                                <span class="radio-indicator"></span>
+                                <span><strong>Esfera Pública</strong> (2616 museus)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" id="sphere-privada" name="sphere" value="privada">
+                            <label for="sphere-privada" class="radio-label">
+                                <span class="radio-indicator"></span>
+                                <span><strong>Esfera Privada</strong> (1183 museus)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" id="sphere-particular" name="sphere" value="particular">
+                            <label for="sphere-particular" class="radio-label">
+                                <span class="radio-indicator"></span>
+                                <span><strong>Museus Particulares</strong> (141 museus)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" id="sphere-mista" name="sphere" value="mista">
+                            <label for="sphere-mista" class="radio-label">
+                                <span class="radio-indicator"></span>
+                                <span><strong>Esfera Mista</strong> (23 museus)</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option">
+                            <input type="radio" id="sphere-nao-informada" name="sphere" value="nao-informada">
+                            <label for="sphere-nao-informada" class="radio-label">
+                                <span class="radio-indicator"></span>
+                                <span><strong>Sem informação na base</strong> (59 museus)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statsContainer" class="stats-grid" role="region" aria-label="Estatísticas visuais"
+                    aria-live="polite"></div>
+            </section>
+
+            <section class="article-section">
+                <h2>Acessibilidade dos museus por estado</h2>
+                <!--<p>Análise dos museus acessíveis por estado</p>-->
+
+                <div class="sparkline-legend">
+
+                    <div class="sparkline-legend">
+                        <div class="legend-item-sparkline">
+                            <div class="legend-color" style="background-color: #2d9f4f;"></div>
+                            <span>Acessível</span>
+                        </div>
+                        <div class="legend-item-sparkline">
+                            <div class="legend-color" style="background-color: #f5b800;"></div>
+                            <span>Parcialmente acessível</span>
+                        </div>
+                        <div class="legend-item-sparkline">
+                            <div class="legend-color" style="background-color: #e74c5c;"></div>
+                            <span>Sem recursos</span>
+                        </div>
+                        <div class="legend-item-sparkline">
+                            <div class="legend-color" style="background-color: #6b7885;"></div>
+                            <span>Informação insuficiente</span>
+                        </div>
+                    </div>
+
+
+
+                    <div id="sortAnnouncement" class="sort-announcement" role="status" aria-live="polite"
+                        aria-atomic="true"></div>
+                </div>
+
+                <div class="sparkline-table-container">
+                    <table class="sparkline-table" id="sparklineTable" tabindex="0">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="sortable" data-sort="estado" tabindex="-1" role="button"
+                                    aria-label="Ordenar por estado">
+                                    Estado
+                                </th>
+                                <th scope="col" class="sortable" data-sort="total" tabindex="-1" role="button"
+                                    aria-label="Ordenar por total de museus">
+                                    Total
+                                </th>
+                                <th scope="col" class="sortable" data-sort="acessivel" tabindex="-1" role="button"
+                                    aria-label="Ordenar por acessíveis">
+                                    Acessível
+                                </th>
+                                <th scope="col" class="sortable" data-sort="parcial" tabindex="-1" role="button"
+                                    aria-label="Ordenar por parcialmente acessíveis">
+                                    Parcial
+                                </th>
+                                <th scope="col" class="sortable" data-sort="sem" tabindex="-1" role="button"
+                                    aria-label="Ordenar por sem recursos">
+                                    Sem recursos
+                                </th>
+                                <th scope="col" class="sortable" data-sort="insuf" tabindex="-1" role="button"
+                                    aria-label="Ordenar por informação insuficiente">
+                                    Info insuficiente
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="sparklineTableBody">
+                            <!-- Será preenchido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="show-more-container">
+                    <button id="showMoreButton" class="show-more-button" type="button">
+                        Exibir todos os estados
+                    </button>
+                </div>
+
+
+            </section>
+
+            <section class="article-section">
+                <h2>Mais análises</h2>
+                <p>Conteúdo adicional será inserido aqui... =)</p>
+            </section>
+        </article>
+
+        <a href="#main-nav" class="back-to-top" tabindex="0">Voltar ao menu de navegação do site</a>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">Projeto desenvolvido por Ícaro Ferracini como trabalho de conclusão de curso para o MBA
+            de Jornalismo de Dados - 2025</p>
+    </footer>
+
+    <script>
+        // ============================================
+        // DADOS DO GRÁFICO
+        // ============================================
+        let varAcessivel = 'com acessibilidade completa';
+        let varParcAcessivel = 'com alguns recursos de acessibilidade';
+        let varNaoAcessivel = 'sem recursos de acessibilidade';
+        let varSemRecursos = 'sem informações disponíveis';
+
+        const dataByeSphere = {
+
+            todos: [
+                { percentage: 8, total: 321, color: '#2d9f4f', label: varAcessivel },
+                { percentage: 34.9, total: 1403, color: '#f5b800', label: varParcAcessivel },
+                { percentage: 29.4, total: 1182, color: '#e74c5c', label: varNaoAcessivel },
+                { percentage: 27.8, total: 1118, color: '#6b7885', label: varSemRecursos }
+            ],
+            publica: [
+                { percentage: 7.9, total: 206, color: '#2d9f4f', label: varAcessivel },
+                { percentage: 36.7, total: 960, color: '#f5b800', label: varParcAcessivel },
+                { percentage: 32.0, total: 836, color: '#e74c5c', label: varNaoAcessivel },
+                { percentage: 23.5, total: 614, color: '#6b7885', label: varSemRecursos }
+            ],
+            privada: [
+                { percentage: 8.0, total: 95, color: '#2d9f4f', label: varAcessivel },
+                { percentage: 31.4, total: 372, color: '#f5b800', label: varParcAcessivel },
+                { percentage: 23.7, total: 280, color: '#e74c5c', label: varNaoAcessivel },
+                { percentage: 36.9, total: 436, color: '#6b7885', label: varSemRecursos }
+            ],
+            particular: [
+                { percentage: 10.6, total: 15, color: '#2d9f4f', label: varAcessivel },
+                { percentage: 36.9, total: 52, color: '#f5b800', label: varParcAcessivel },
+                { percentage: 33.3, total: 47, color: '#e74c5c', label: varNaoAcessivel },
+                { percentage: 19.1, total: 27, color: '#6b7885', label: varSemRecursos }
+            ],
+            mista: [
+                { percentage: 21.7, total: 5, color: '#2d9f4f', label: varAcessivel },
+                { percentage: 60.9, total: 14, color: '#f5b800', label: varParcAcessivel },
+                { percentage: 17.4, total: 4, color: '#e74c5c', label: varNaoAcessivel },
+                { percentage: 0.0, total: 0, color: '#6b7885', label: varSemRecursos }
+            ],
+            'nao-informada': [
+                { percentage: 0.0, total: 0, color: '#2d9f4f', label: varAcessivel },
+                { percentage: 5.1, total: 3, color: '#f5b800', label: varParcAcessivel },
+                { percentage: 25.4, total: 15, color: '#e74c5c', label: varNaoAcessivel },
+                { percentage: 69.5, total: 41, color: '#6b7885', label: varSemRecursos }
+            ]
+        };
+
+        let statsData = [...dataByeSphere.todos];
+        const COLUMNS = 10;
+        const TOTAL_SQUARES = 100;
+        const ANIMATION_CONFIG = { squareDelay: 8, numberDuration: 800, easing: 'easeOutCubic' };
+
+        // ============================================
+        // FUNÇÕES DE ANIMAÇÃO
+        // ============================================
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function animateNumber(element, start, end, duration, isPercentage = false) {
+            const startTime = performance.now();
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easedProgress = easeOutCubic(progress);
+                const currentValue = start + (end - start) * easedProgress;
+
+                if (isPercentage) {
+                    element.textContent = `${currentValue.toLocaleString('pt-BR', {
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 1
+                    })}%`;
+                } else {
+                    element.textContent = Math.round(currentValue).toLocaleString('pt-BR');
+                }
+
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        function animateSquares(container, oldCount, newCount, color) {
+            const squares = container.querySelectorAll('.square');
+            const isIncreasing = newCount > oldCount;
+            const start = Math.min(oldCount, newCount);
+            const end = Math.max(oldCount, newCount);
+
+            for (let i = start; i < end; i++) {
+                const square = squares[i];
+                const delay = (i - start) * ANIMATION_CONFIG.squareDelay;
+
+                setTimeout(() => {
+                    square.classList.add('animating');
+                    if (isIncreasing) {
+                        square.classList.remove('empty');
+                        square.classList.add('filled');
+                        square.style.backgroundColor = color;
+                    } else {
+                        square.classList.remove('filled');
+                        square.classList.add('empty');
+                        square.style.backgroundColor = '';
+                    }
+                    setTimeout(() => square.classList.remove('animating'), 150);
+                }, delay);
+            }
+        }
+
+        // ============================================
+        // FUNÇÕES DE RENDERIZAÇÃO
+        // ============================================
+        function createStatItem(data) {
+            const { percentage, total, color, label } = data;
+            const filledSquares = Math.round((percentage / 100) * TOTAL_SQUARES);
+
+            const statItem = document.createElement('div');
+            statItem.className = 'stat-item';
+            statItem.setAttribute('role', 'article');
+            statItem.setAttribute('tabindex', '0');
+            statItem.setAttribute('aria-label', `${percentage}% dos museus ${label}. Total: ${total} museus cadastrados`);
+
+            // Adiciona porcentagem
+            const percentageDiv = document.createElement('div');
+            percentageDiv.className = 'percentage';
+            percentageDiv.style.color = color;
+            percentageDiv.textContent = `${percentage.toLocaleString('pt-BR')}%`;
+            percentageDiv.setAttribute('aria-hidden', 'true');
+
+            // Adiciona total
+            const totalDiv = document.createElement('div');
+            totalDiv.className = 'total';
+            totalDiv.textContent = total.toLocaleString('pt-BR');
+            totalDiv.setAttribute('aria-hidden', 'true');
+
+            // Adiciona label (categoria)
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'label';
+            labelDiv.textContent = label;
+            labelDiv.setAttribute('aria-hidden', 'true');
+
+            // Cria o grid de quadrados (de baixo para cima)
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+            grid.setAttribute('role', 'img');
+            grid.setAttribute('aria-label', `Representação visual: ${filledSquares} de ${TOTAL_SQUARES} quadrados preenchidos`);
+
+            const rows = Math.ceil(TOTAL_SQUARES / COLUMNS);
+            let squareIndex = 0;
+
+            for (let row = 0; row < rows; row++) {
+                const gridRow = document.createElement('div');
+                gridRow.className = 'grid-row';
+
+                for (let col = 0; col < COLUMNS; col++) {
+                    const square = document.createElement('div');
+                    square.className = 'square';
+
+                    if (squareIndex < filledSquares) {
+                        square.classList.add('filled');
+                        square.style.backgroundColor = color;
+                    } else {
+                        square.classList.add('empty');
+                    }
+
+                    square.setAttribute('aria-hidden', 'true');
+                    gridRow.appendChild(square);
+                    squareIndex++;
+                }
+                grid.appendChild(gridRow);
+            }
+
+            // Monta o item na nova ordem: porcentagem → total → label → grid
+            statItem.appendChild(percentageDiv);
+            statItem.appendChild(totalDiv);
+            statItem.appendChild(labelDiv);
+            statItem.appendChild(grid);
+
+            return statItem;
+        }
+
+
+        function renderStats(animate = false) {
+            const container = document.getElementById('statsContainer');
+
+            if (!animate || container.children.length === 0) {
+                container.innerHTML = '';
+                statsData.forEach(data => {
+                    const statItem = createStatItem(data);
+                    container.appendChild(statItem);
+                });
+                return;
+            }
+
+            const statItems = container.querySelectorAll('.stat-item');
+            statsData.forEach((data, index) => {
+                if (statItems[index]) {
+                    updateStatItemAnimated(statItems[index], data);
+                }
+            });
+        }
+
+        function updateStatItemAnimated(statItem, newData) {
+            const { percentage, total, color, label } = newData;
+            const newFilledSquares = Math.round((percentage / 100) * TOTAL_SQUARES);
+
+            // Atualiza aria-label do stat-item
+            statItem.setAttribute('aria-label', `${percentage}% dos museus ${label}. Total: ${total} museus cadastrados`);
+
+            const percentageDiv = statItem.querySelector('.percentage');
+            const totalDiv = statItem.querySelector('.total');
+            const grid = statItem.querySelector('.grid');
+            const labelDiv = statItem.querySelector('.label');
+
+            const oldPercentageText = percentageDiv.textContent.replace('%', '').replace(',', '.');
+            const oldPercentage = parseFloat(oldPercentageText) || 0;
+            const oldTotalText = totalDiv.textContent.replace(/\./g, '');
+            const oldTotal = parseInt(oldTotalText) || 0;
+            const oldFilledSquares = grid.querySelectorAll('.square.filled').length;
+
+            // Atualiza texto da label
+            labelDiv.textContent = label;
+
+            // Atualiza cor da porcentagem
+            percentageDiv.style.color = color;
+
+            // Atualiza aria-label do grid
+            grid.setAttribute('aria-label', `Representação visual: ${newFilledSquares} de ${TOTAL_SQUARES} quadrados preenchidos`);
+
+            // Anima números
+            animateNumber(percentageDiv, oldPercentage, percentage, ANIMATION_CONFIG.numberDuration, true);
+            animateNumber(totalDiv, oldTotal, total, ANIMATION_CONFIG.numberDuration, false);
+            animateSquares(grid, oldFilledSquares, newFilledSquares, color);
+        }
+
+        function updateStatsBySphere(sphere) {
+            if (dataByeSphere[sphere]) {
+                statsData = [...dataByeSphere[sphere]];
+                renderStats(true);
+
+                // Anuncia a mudança para leitores de tela
+                const announcement = document.getElementById('statsAnnouncement');
+                if (announcement) {
+                    const sphereNames = {
+                        'todos': 'Todos os museus',
+                        'publica': 'Museus públicos',
+                        'privada': 'Museus privados',
+                        'particular': 'Museus particulares',
+                        'mista': 'Museus de esfera mista',
+                        'nao-informada': 'Museus com esfera não informada'
+                    };
+
+                    const total = statsData.reduce((sum, item) => sum + item.total, 0);
+                    announcement.textContent = `Dados atualizados para ${sphereNames[sphere]}. Total: ${total} museus. Os gráficos foram atualizados com as novas porcentagens.`;
+                }
+            }
+        }
+        function updateAriaDescription(sphere) {
+            const description = document.getElementById('statsDescription');
+            if (!description) return;
+
+            const data = dataByeSphere[sphere];
+            const sphereNames = {
+                'todos': 'Todos os museus',
+                'publica': 'Museus públicos',
+                'privada': 'Museus privados',
+                'particular': 'Museus particulares',
+                'mista': 'Museus de esfera mista',
+                'nao-informada': 'Museus com esfera não informada'
+            };
+
+            const total = data.reduce((sum, item) => sum + item.total, 0);
+            const sphereName = sphereNames[sphere] || 'Museus';
+
+            const details = data.map(item =>
+                `${item.percentage}% ${item.label}: ${item.total} museus`
+            ).join(', ');
+
+            description.textContent = `${sphereName}: total de ${total} museus. ${details}`;
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStats(false);
+            initSphereFilter();
+            updateAriaDescription('todos'); // Descrição inicial
+        });
+
+        // #######################################################################
+
+        // ============================================
+        // DADOS DOS MUSEUS POR ESTADO
+        // ============================================
+        const museusPorEstado = [
+            { estado: 'SP', nomeCompleto: 'São Paulo', total: 698, acessivel: 9.5, totalAcessivel: 66, parcial: 35.1, totalParcial: 245, sem: 33.8, totalSem: 236, insuf: 21.6, totalInsuf: 151 },
+            { estado: 'RS', nomeCompleto: 'Rio Grande do Sul', total: 496, acessivel: 5.2, totalAcessivel: 26, parcial: 34.9, totalParcial: 173, sem: 23.6, totalSem: 117, insuf: 36.3, totalInsuf: 180 },
+            { estado: 'MG', nomeCompleto: 'Minas Gerais', total: 477, acessivel: 9.2, totalAcessivel: 44, parcial: 39.2, totalParcial: 187, sem: 49.9, totalSem: 238, insuf: 1.7, totalInsuf: 8 },
+            { estado: 'RJ', nomeCompleto: 'Rio de Janeiro', total: 334, acessivel: 10.2, totalAcessivel: 34, parcial: 35.0, totalParcial: 117, sem: 26.9, totalSem: 90, insuf: 27.8, totalInsuf: 93 },
+            { estado: 'PR', nomeCompleto: 'Paraná', total: 314, acessivel: 6.1, totalAcessivel: 19, parcial: 27.4, totalParcial: 86, sem: 19.4, totalSem: 61, insuf: 47.1, totalInsuf: 148 },
+            { estado: 'SC', nomeCompleto: 'Santa Catarina', total: 254, acessivel: 6.7, totalAcessivel: 17, parcial: 40.9, totalParcial: 104, sem: 24.4, totalSem: 62, insuf: 28.0, totalInsuf: 71 },
+            { estado: 'BA', nomeCompleto: 'Bahia', total: 191, acessivel: 6.8, totalAcessivel: 13, parcial: 28.8, totalParcial: 55, sem: 30.4, totalSem: 58, insuf: 34.0, totalInsuf: 65 },
+            { estado: 'CE', nomeCompleto: 'Ceará', total: 183, acessivel: 6.6, totalAcessivel: 12, parcial: 35.5, totalParcial: 65, sem: 19.1, totalSem: 35, insuf: 38.8, totalInsuf: 71 },
+            { estado: 'PE', nomeCompleto: 'Pernambuco', total: 141, acessivel: 10.6, totalAcessivel: 15, parcial: 40.4, totalParcial: 57, sem: 25.5, totalSem: 36, insuf: 23.4, totalInsuf: 33 },
+            { estado: 'PB', nomeCompleto: 'Paraíba', total: 101, acessivel: 4.0, totalAcessivel: 4, parcial: 26.7, totalParcial: 27, sem: 25.7, totalSem: 26, insuf: 43.6, totalInsuf: 44 },
+            { estado: 'DF', nomeCompleto: 'Distrito Federal', total: 90, acessivel: 12.2, totalAcessivel: 11, parcial: 42.2, totalParcial: 38, sem: 33.3, totalSem: 30, insuf: 12.2, totalInsuf: 11 },
+            { estado: 'RN', nomeCompleto: 'Rio Grande do Norte', total: 89, acessivel: 5.6, totalAcessivel: 5, parcial: 30.3, totalParcial: 27, sem: 21.3, totalSem: 19, insuf: 42.7, totalInsuf: 38 },
+            { estado: 'ES', nomeCompleto: 'Espírito Santo', total: 84, acessivel: 10.7, totalAcessivel: 9, parcial: 60.7, totalParcial: 51, sem: 26.2, totalSem: 22, insuf: 2.4, totalInsuf: 2 },
+            { estado: 'GO', nomeCompleto: 'Goiás', total: 83, acessivel: 8.4, totalAcessivel: 7, parcial: 37.3, totalParcial: 31, sem: 28.9, totalSem: 24, insuf: 25.3, totalInsuf: 21 },
+            { estado: 'AL', nomeCompleto: 'Alagoas', total: 67, acessivel: 0.0, totalAcessivel: 0, parcial: 28.4, totalParcial: 19, sem: 22.4, totalSem: 15, insuf: 49.3, totalInsuf: 33 },
+            { estado: 'PA', nomeCompleto: 'Pará', total: 63, acessivel: 11.1, totalAcessivel: 7, parcial: 39.7, totalParcial: 25, sem: 28.6, totalSem: 18, insuf: 20.6, totalInsuf: 13 },
+            { estado: 'MS', nomeCompleto: 'Mato Grosso do Sul', total: 60, acessivel: 3.3, totalAcessivel: 2, parcial: 20.0, totalParcial: 12, sem: 28.3, totalSem: 17, insuf: 48.3, totalInsuf: 29 },
+            { estado: 'MT', nomeCompleto: 'Mato Grosso', total: 55, acessivel: 7.3, totalAcessivel: 4, parcial: 23.6, totalParcial: 13, sem: 20.0, totalSem: 11, insuf: 49.1, totalInsuf: 27 },
+            { estado: 'MA', nomeCompleto: 'Maranhão', total: 54, acessivel: 16.7, totalAcessivel: 9, parcial: 29.6, totalParcial: 16, sem: 31.5, totalSem: 17, insuf: 22.2, totalInsuf: 12 },
+            { estado: 'AM', nomeCompleto: 'Amazonas', total: 48, acessivel: 12.5, totalAcessivel: 6, parcial: 22.9, totalParcial: 11, sem: 27.1, totalSem: 13, insuf: 37.5, totalInsuf: 18 },
+            { estado: 'SE', nomeCompleto: 'Sergipe', total: 34, acessivel: 11.8, totalAcessivel: 4, parcial: 35.3, totalParcial: 12, sem: 23.5, totalSem: 8, insuf: 29.4, totalInsuf: 10 },
+            { estado: 'PI', nomeCompleto: 'Piauí', total: 33, acessivel: 6.1, totalAcessivel: 2, parcial: 33.3, totalParcial: 11, sem: 27.3, totalSem: 9, insuf: 33.3, totalInsuf: 11 },
+            { estado: 'AC', nomeCompleto: 'Acre', total: 24, acessivel: 8.3, totalAcessivel: 2, parcial: 12.5, totalParcial: 3, sem: 20.8, totalSem: 5, insuf: 58.3, totalInsuf: 14 },
+            { estado: 'TO', nomeCompleto: 'Tocantins', total: 21, acessivel: 4.8, totalAcessivel: 1, parcial: 42.9, totalParcial: 9, sem: 23.8, totalSem: 5, insuf: 28.6, totalInsuf: 6 },
+            { estado: 'RO', nomeCompleto: 'Rondônia', total: 18, acessivel: 11.1, totalAcessivel: 2, parcial: 27.8, totalParcial: 5, sem: 27.8, totalSem: 5, insuf: 33.3, totalInsuf: 6 },
+            { estado: 'AP', nomeCompleto: 'Amapá', total: 9, acessivel: 0.0, totalAcessivel: 0, parcial: 33.3, totalParcial: 3, sem: 33.3, totalSem: 3, insuf: 33.3, totalInsuf: 3 },
+            { estado: 'RR', nomeCompleto: 'Roraima', total: 3, acessivel: 0.0, totalAcessivel: 0, parcial: 33.3, totalParcial: 1, sem: 66.7, totalSem: 2, insuf: 0.0, totalInsuf: 0 }
+        ];
+
+        let currentSortColumn = 'total';
+        let currentSortOrder = 'desc';
+
+        // ============================================
+        // FUNÇÕES DE RENDERIZAÇÃO
+        // ============================================
+
+        /**
+         * Cria uma mini barra com porcentagem e quantidade
+         */
+        /**
+         * Cria uma mini barra com porcentagem e quantidade
+         */
+        function createMiniBar(percentage, count, colorClass, categoryLabel) {
+            const container = document.createElement('div');
+            container.className = 'sparkline-mini-bar';
+
+            // Barra visual
+            const barVisual = document.createElement('div');
+            barVisual.className = `bar-visual ${colorClass}`;
+            barVisual.style.width = `${percentage}%`; //`${Math.max(percentage * 0.8, 2)}px`;
+            barVisual.setAttribute('aria-hidden', 'true');
+
+            // Informações textuais
+            const barInfo = document.createElement('div');
+            barInfo.className = 'bar-info';
+
+            const text = document.createElement('span');
+            text.className = 'bar-percentage';
+            text.textContent = `${percentage.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}% (${count})`;
+
+            barInfo.appendChild(text);
+
+            container.appendChild(barVisual);
+            container.appendChild(barInfo);
+
+            return container;
+        }
+
+        /**
+         * Cria uma linha da tabela sparkline
+         */
+        function createSparklineRow(data) {
+            const row = document.createElement('tr');
+
+            // Coluna Estado
+            const estadoCell = document.createElement('td');
+            estadoCell.className = 'estado-name';
+            estadoCell.setAttribute('scope', 'row');
+            estadoCell.setAttribute('data-label', 'Estado:');
+            estadoCell.setAttribute('tabindex', '-1');
+            estadoCell.setAttribute('aria-label', `Estado: ${data.nomeCompleto}`);
+            const estadoText = document.createElement('span');
+            estadoText.setAttribute('aria-hidden', 'true');
+            estadoText.textContent = data.nomeCompleto;
+            estadoCell.appendChild(estadoText);
+
+            // Coluna Total
+            const totalCell = document.createElement('td');
+            totalCell.className = 'total-museus';
+            totalCell.setAttribute('data-label', 'Total:');
+            totalCell.setAttribute('tabindex', '-1');
+            totalCell.setAttribute('aria-label', `${data.total} ${data.total === 1 ? 'museu' : 'museus'} no total`);
+            const totalText = document.createElement('span');
+            totalText.setAttribute('aria-hidden', 'true');
+            totalText.textContent = data.total.toLocaleString('pt-BR');
+            totalCell.appendChild(totalText);
+
+            // Coluna Acessível
+            const acessivelCell = document.createElement('td');
+            acessivelCell.className = 'sparkline-cell';
+            acessivelCell.setAttribute('data-label', 'Acessível:');
+            acessivelCell.setAttribute('tabindex', '-1');
+            const acessivelLabel = data.totalAcessivel === 0
+                ? 'Nenhum museu com acessibilidade completa'
+                : `${data.totalAcessivel} ${data.totalAcessivel === 1 ? 'museu' : 'museus'}, correspondendo a ${data.acessivel.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%, com acessibilidade completa`;
+            acessivelCell.setAttribute('aria-label', acessivelLabel);
+            const acessivelContainer = document.createElement('div');
+            acessivelContainer.className = 'category-container';
+            acessivelContainer.setAttribute('aria-hidden', 'true');
+            acessivelContainer.appendChild(createMiniBar(data.acessivel, data.totalAcessivel, 'acessivel', 'Acessível'));
+            acessivelCell.appendChild(acessivelContainer);
+
+            // Coluna Parcial
+            const parcialCell = document.createElement('td');
+            parcialCell.className = 'sparkline-cell';
+            parcialCell.setAttribute('data-label', 'Parcialmente acessível:');
+            parcialCell.setAttribute('tabindex', '-1');
+            const parcialLabel = data.totalParcial === 0
+                ? 'Nenhum museu com alguns recursos de acessibilidade'
+                : `${data.totalParcial} ${data.totalParcial === 1 ? 'museu' : 'museus'}, correspondendo a ${data.parcial.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%, com alguns recursos de acessibilidade`;
+            parcialCell.setAttribute('aria-label', parcialLabel);
+            const parcialContainer = document.createElement('div');
+            parcialContainer.className = 'category-container';
+            parcialContainer.setAttribute('aria-hidden', 'true');
+            parcialContainer.appendChild(createMiniBar(data.parcial, data.totalParcial, 'parcial', 'Parcial'));
+            parcialCell.appendChild(parcialContainer);
+
+            // Coluna Sem Recursos
+            const semCell = document.createElement('td');
+            semCell.className = 'sparkline-cell';
+            semCell.setAttribute('data-label', 'Sem recursos:');
+            semCell.setAttribute('tabindex', '-1');
+            const semLabel = data.totalSem === 0
+                ? 'Nenhum museu sem recursos de acessibilidade'
+                : `${data.totalSem} ${data.totalSem === 1 ? 'museu' : 'museus'}, correspondendo a ${data.sem.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%, sem recursos de acessibilidade`;
+            semCell.setAttribute('aria-label', semLabel);
+            const semContainer = document.createElement('div');
+            semContainer.className = 'category-container';
+            semContainer.setAttribute('aria-hidden', 'true');
+            semContainer.appendChild(createMiniBar(data.sem, data.totalSem, 'sem-recursos', 'Sem recursos'));
+            semCell.appendChild(semContainer);
+
+            // Coluna Info Insuficiente
+            const insufCell = document.createElement('td');
+            insufCell.className = 'sparkline-cell';
+            insufCell.setAttribute('data-label', 'Informação insuficiente:');
+            insufCell.setAttribute('tabindex', '-1');
+            const insufLabel = data.totalInsuf === 0
+                ? 'Nenhum museu sem informação disponível'
+                : `${data.totalInsuf} ${data.totalInsuf === 1 ? 'museu' : 'museus'}, correspondendo a ${data.insuf.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%, sem informação disponível`;
+            insufCell.setAttribute('aria-label', insufLabel);
+            const insufContainer = document.createElement('div');
+            insufContainer.className = 'category-container';
+            insufContainer.setAttribute('aria-hidden', 'true');
+            insufContainer.appendChild(createMiniBar(data.insuf, data.totalInsuf, 'insuficiente', 'Info insuficiente'));
+            insufCell.appendChild(insufContainer);
+
+            row.appendChild(estadoCell);
+            row.appendChild(totalCell);
+            row.appendChild(acessivelCell);
+            row.appendChild(parcialCell);
+            row.appendChild(semCell);
+            row.appendChild(insufCell);
+
+            return row;
+        }
+
+        /**
+         * Renderiza a tabela completa
+         */
+        /**
+         * Renderiza a tabela completa
+         */
+        function renderSparklineTable(data = museusPorEstado, showAll = false) {
+            const tbody = document.getElementById('sparklineTableBody');
+            tbody.innerHTML = '';
+
+            data.forEach((estado, index) => {
+                const row = createSparklineRow(estado); // CORRIGIDO: era createStatem
+
+                // Adiciona classe hidden-row para linhas além das 5 primeiras
+                if (index >= 5 && !showAll) {
+                    row.classList.add('hidden-row');
+                }
+
+                tbody.appendChild(row);
+            });
+
+            // Atualiza botão
+            updateShowMoreButton(data.length, showAll);
+        }
+        /**
+         * Atualiza o estado do botão "Mostrar mais"
+         */
+        function updateShowMoreButton(totalRows, showAll) {
+            const button = document.getElementById('showMoreButton');
+            const container = button.parentElement;
+
+            if (totalRows <= 5) {
+                container.style.display = 'none';
+            } else {
+                container.style.display = 'block';
+                if (showAll) {
+                    button.textContent = 'Exibir apenas primeiros 5';
+                    button.setAttribute('aria-label', 'Recolher tabela para mostrar apenas os 5 primeiros estados');
+                } else {
+                    button.textContent = `Exibir todos os ${totalRows} estados`;
+                    button.setAttribute('aria-label', `Expandir tabela para mostrar todos os ${totalRows} estados`);
+                }
+            }
+        }
+
+        /**
+         * Alterna exibição completa/resumida
+         */
+        function toggleShowAll() {
+            const hiddenRows = document.querySelectorAll('.hidden-row');
+            const isCurrentlyHidden = hiddenRows.length > 0;
+
+            if (isCurrentlyHidden) {
+                // Mostrar todos
+                hiddenRows.forEach(row => row.classList.remove('hidden-row'));
+                updateShowMoreButton(museusPorEstado.length, true);
+            } else {
+                // Mostrar apenas 5
+                const allRows = document.querySelectorAll('#sparklineTableBody tr');
+                allRows.forEach((row, index) => {
+                    if (index >= 5) {
+                        row.classList.add('hidden-row');
+                    }
+                });
+                updateShowMoreButton(museusPorEstado.length, false);
+            }
+        }
+        /**
+         * Ordena a tabela
+         */
+        function sortSparklineTable(column) {
+            const announcement = document.getElementById('sortAnnouncement');
+
+            // Define ordem
+            if (currentSortColumn === column) {
+                currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortOrder = column === 'estado' ? 'asc' : 'desc';
+            }
+
+            // Ordena dados
+            const sortedData = [...museusPorEstado].sort((a, b) => {
+                let comparison = 0;
+
+                if (column === 'estado') {
+                    comparison = a.estado.localeCompare(b.estado);
+                } else if (column === 'total') {
+                    comparison = a.total - b.total;
+                } else if (column === 'acessivel') {
+                    comparison = a.acessivel - b.acessivel;
+                } else if (column === 'parcial') {
+                    comparison = a.parcial - b.parcial;
+                } else if (column === 'sem') {
+                    comparison = a.sem - b.sem;
+                } else if (column === 'insuf') {
+                    comparison = a.insuf - b.insuf;
+                }
+
+                return currentSortOrder === 'asc' ? comparison : -comparison;
+            });
+
+            // Atualiza cabeçalhos
+            document.querySelectorAll('.sparkline-table th').forEach(th => {
+                th.classList.remove('sorted-asc', 'sorted-desc');
+                if (th.dataset.sort === column) {
+                    th.classList.add(`sorted-${currentSortOrder}`);
+                }
+            });
+
+            // Re-renderiza
+            renderSparklineTable(sortedData);
+
+            // Anuncia mudança
+            const orderText = currentSortOrder === 'asc' ? 'crescente' : 'decrescente';
+            const columnNames = {
+                'estado': 'estado',
+                'total': 'total de museus',
+                'acessivel': 'museus acessíveis',
+                'parcial': 'museus parcialmente acessíveis',
+                'sem': 'museus sem recursos',
+                'insuf': 'museus com informação insuficiente'
+            };
+            announcement.textContent = `Tabela ordenada por ${columnNames[column]} em ordem ${orderText}`;
+        }
+
+        /**
+         * Inicializa eventos de ordenação
+         */
+        function initSparklineSort() {
+            document.querySelectorAll('.sparkline-table th.sortable').forEach(th => {
+                th.addEventListener('click', () => {
+                    sortSparklineTable(th.dataset.sort);
+                });
+
+                th.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        sortSparklineTable(th.dataset.sort);
+                    }
+                });
+            });
+        }
+
+        // ====================================================
+        // MELHORIAS DE ACESSIBILIDADE NA TABELA
+        // ====================================================
+
+        const table = document.getElementById('sparklineTable');
+        table.setAttribute('role', 'table');
+        table.setAttribute('aria-label', 'Tabela com dados de todos os estados. Pressione Enter ou Espaço para começar a navegar pelas células. Pressione ESC para sair.');
+
+        // Estado interno
+        let tableActive = false;
+        let previousFocusElement = null;
+
+
+        // Ativa/desativa navegação da tabela
+        table.addEventListener('keydown', (event) => {
+            const allCells = Array.from(table.querySelectorAll('td'));
+            const focusableCells = allCells.filter(td => td.getAttribute('tabindex') === '0');
+            const currentIndex = focusableCells.indexOf(document.activeElement);
+
+            if ((event.key === 'Enter' || event.key === ' ') && !tableActive) {
+                event.preventDefault();
+                tableActive = true;
+                previousFocusElement = document.activeElement;
+
+                // Torna células focáveis
+                allCells.forEach(td => td.setAttribute('tabindex', '0'));
+                focusableCells[0].focus();
+
+                const announcement = document.getElementById('sortAnnouncement');
+                announcement.textContent = 'Modo de navegação na tabela ativado. Use Tab ou Shift+Tab para percorrer as células. Pressione ESC para sair.';
+            }
+
+            if (event.key === 'Escape' && tableActive) {
+                event.preventDefault();
+                tableActive = false;
+
+                // Remove focabilidade das células
+                allCells.forEach(td => td.setAttribute('tabindex', '-1'));
+
+                if (previousFocusElement) previousFocusElement.focus();
+                const announcement = document.getElementById('sortAnnouncement');
+                announcement.textContent = 'Saiu da tabela. Foco retornado ao elemento anterior.';
+            }
+        });
+
+        // ====================================================
+        // Foco após expandir tabela (melhor UX)
+        // ====================================================
+        document.getElementById('showMoreButton').addEventListener('click', () => {
+            setTimeout(() => {
+                const table = document.getElementById('sparklineTable');
+                if (table) {
+                    table.focus();
+
+                    // Atualiza mensagem para leitores de tela
+                    const announcement = document.getElementById('sortAnnouncement');
+                    announcement.textContent = 'Tabela expandida. Agora todos os 27 estados estão visíveis. Pressione Enter ou Espaço para começar a navegar pelas células.';
+                }
+            }, 200);
+        });
+
+
+
+
+
+        // #########################################################################
+
+        // ============================================
+        // INICIALIZAÇÃO DOS FILTROS
+        // ============================================
+        function initSphereFilter() {
+            const radioButtons = document.querySelectorAll('input[name="sphere"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const selectedSphere = e.target.value;
+                    updateStatsBySphere(selectedSphere);
+                });
+            });
+        }
+
+        // ============================================
+        // MODO ESCURO
+        // ============================================
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        function enableDarkMode() {
+            body.classList.add('dark-mode');
+            darkModeToggle.textContent = '☀️ Modo claro';
+            darkModeToggle.setAttribute('aria-label', 'Alternar para modo claro');
+        }
+
+        function disableDarkMode() {
+            body.classList.remove('dark-mode');
+            darkModeToggle.textContent = '🌙 Modo escuro';
+            darkModeToggle.setAttribute('aria-label', 'Alternar para modo escuro');
+        }
+
+        const savedMode = localStorage.getItem('darkMode');
+        if (savedMode === 'enabled') {
+            enableDarkMode();
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.textContent = '☀️ Modo claro';
+                darkModeToggle.setAttribute('aria-label', 'Alternar para modo claro');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.textContent = '🌙 Modo escuro';
+                darkModeToggle.setAttribute('aria-label', 'Alternar para modo escuro');
+            }
+        });
+
+        // ============================================
+        // CONTROLE DE TAMANHO DE FONTE
+        // ============================================
+        let currentFontSize = 100;
+        const minFontSize = 75;
+        const maxFontSize = 150;
+        const fontSizeStep = 12.5;
+
+        if (localStorage.getItem('fontSize')) {
+            currentFontSize = parseFloat(localStorage.getItem('fontSize'));
+            document.documentElement.style.fontSize = currentFontSize + '%';
+        }
+
+        document.getElementById('increaseText').addEventListener('click', () => {
+            if (currentFontSize < maxFontSize) {
+                currentFontSize += fontSizeStep;
+                document.documentElement.style.fontSize = currentFontSize + '%';
+                localStorage.setItem('fontSize', currentFontSize);
+            }
+        });
+
+        document.getElementById('decreaseText').addEventListener('click', () => {
+            if (currentFontSize > minFontSize) {
+                currentFontSize -= fontSizeStep;
+                document.documentElement.style.fontSize = currentFontSize + '%';
+                localStorage.setItem('fontSize', currentFontSize);
+            }
+        });
+
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStats(false);
+            initSphereFilter();
+            // Renderiza ordenado por total (decrescente) e marca o cabeçalho
+            currentSortColumn = 'total';
+            currentSortOrder = 'desc';
+
+            const sortedData = [...museusPorEstado].sort((a, b) => b.total - a.total);
+            renderSparklineTable(sortedData, false); // false = mostrar apenas 5
+
+            // Marca o cabeçalho como ordenado
+            document.querySelector('.sparkline-table th[data-sort="total"]').classList.add('sorted-desc');
+
+            // Inicializa eventos
+            initSparklineSort();
+
+            // Evento do botão mostrar mais
+            document.getElementById('showMoreButton').addEventListener('click', toggleShowAll);
+        });
+
+    </script>
+</body>
+
+</html>
